@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import WebPlayback from './WebPlayback'
-import Login from './Login'
+import WebPlayback from './Components/WebPlayback'
+import Login from './Components/Login'
 import './App.css';
 
 function App() {
