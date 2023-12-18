@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Login from './Login'
 import './App.css';
 import TrackPlayer from './TrackPlayer';
+import Logout from './Logout';
 
 function App() {
 
   const [token, setToken] = useState('');
-  const trackId = '1qHX3JQefKOvy64bIWEAhS';
+  const trackId = '25lTenJPmSfwCRZi2hjCcB';
 
 
   useEffect(() => {
@@ -23,7 +24,7 @@ function App() {
 
   return (
     <>
-        { (token === '') ? <Login/> : <TrackPlayer trackId={trackId} token={token}/> }
+        { (token === '') ? <Login/> :  <div><TrackPlayer trackId={trackId} token={token}/> <Logout/></div> }
     </>
   );
 }
