@@ -26,7 +26,7 @@ function TrackPlayer({ trackId, token }) {
 
     return (
         <div>
-            <audio autoplay controls src={previewUrl}/>
+            <audio controls src={previewUrl}/>
         </div>
     );
 }

@@ -3,6 +3,7 @@ import Login from './Login'
 import './App.css';
 import TrackPlayer from './TrackPlayer';
 import Logout from './Logout';
+import MyPlaylists from './MyPlaylists';
 
 function App() {
 
@@ -24,7 +25,7 @@ function App() {
 
   return (
     <>
-        { (token === '') ? <Login/> :  <div><TrackPlayer trackId={trackId} token={token}/> <Logout/></div> }
+        { (token === '') ? <Login/> :  <div><MyPlaylists token={token}/> <TrackPlayer trackId={trackId} token={token}/> <Logout/></div> }
     </>
   );
 }
