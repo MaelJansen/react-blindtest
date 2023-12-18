@@ -2,12 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
-import Game from './Components/Game';
+import GamePage from './Components/GamePage';
+import ParameterPage from './Components/ParameterPage';
 
 ReactDOM.render(
   <React.StrictMode>
       {/*<App />*/}
-      <Game />
+      <ParameterPage />
   </React.StrictMode>,
   document.getElementById('root')
 );
