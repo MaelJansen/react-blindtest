@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Quizz from './Quizz';
+import { Link } from 'react-router-dom';
 
 function MyPlaylists({ token }) {
     const [playlists, setPlaylists] = useState([]);
@@ -32,7 +34,7 @@ function MyPlaylists({ token }) {
                     <img src={playlist.images[0].url} alt={playlist.name} />
                     <p>{playlist.tracks.total} tracks</p>
                     <p>{playlist.description}</p>
-                    <button onClick={() => {}}> Blindtest </button>
+                    <Link to={`/quizz/${playlist.id}`}>Quizz</Link>
                 </div>
             ))}
         </div>

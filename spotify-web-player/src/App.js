@@ -5,6 +5,7 @@ import TrackPlayer from './TrackPlayer';
 import Logout from './Logout';
 import MyPlaylists from './MyPlaylists';
 
+
 function App() {
 
   const [token, setToken] = useState('');
@@ -17,6 +18,7 @@ function App() {
       const response = await fetch('/auth/token');
       const json = await response.json();
       setToken(json.access_token);
+      localStorage.setItem('token', json.access_token);
     }
 
     getToken();
