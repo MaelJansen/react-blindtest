@@ -6,10 +6,7 @@ import Quizz from './Quizz';
 import GamePage from './GamePage';
 import MainPage from './MainPage';
 import Tchat from './Tchat';
-
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import GamePage from "./GamePage";
 
 export default function (props) {
   const router = createBrowserRouter([
