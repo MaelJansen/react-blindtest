@@ -12,12 +12,9 @@ export default function Message({message, username, __createdtime__}) {
 
   return (
     <Feed.Event>
-      <Feed.Label>
-        <img src='https://react.semantic-ui.com/images/avatar/small/elliot.jpg' />
-      </Feed.Label>
       <Feed.Content>
         <Feed.Summary>
-            <Feed.User>{username}</Feed.User>{message}
+            <Feed.User>{username}</Feed.User>: {message}
             <Feed.Date>{formatDateFromTimestamp(__createdtime__)}</Feed.Date>
         </Feed.Summary>
       </Feed.Content>

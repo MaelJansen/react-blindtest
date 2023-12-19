@@ -61,13 +61,13 @@ io.on('connection', (socket) => {
     let __createdtime__ = Date.now(); // Current timestamp
     // Send message to all users currently in the room, apart from the user that just joined
     socket.to(room).emit('receive_message', {
-      message: `${username} has joined the chat room`,
+      message: `${username} a rejoint la partie`,
       username: CHAT_BOT,
       __createdtime__,
     });
     // Send welcome msg to user that just joined chat only
     socket.emit('receive_message', {
-      message: `Welcome ${username}`,
+      message: `Salut ${username}`,
       username: CHAT_BOT,
       __createdtime__,
     });
@@ -82,7 +82,7 @@ io.on('connection', (socket) => {
     socket.to(room).emit('chatroom_users', allUsers);
     socket.to(room).emit('receive_message', {
       username: CHAT_BOT,
-      message: `${username} has left the chat`,
+      message: `${username} a quité la partie`,
       __createdtime__,
     });
     console.log(`${username} left room ${room}`);
