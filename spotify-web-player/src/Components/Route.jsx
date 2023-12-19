@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import App from '../App';
 import Quizz from './Quizz';
 import Game from './Game';
-
+import MainPage from './MainPage';
 
 
 import {
@@ -28,6 +28,11 @@ import {
         {
           path: "/game",
           element:<Game/>
+        },
+
+        {
+          path: "/mainpage",
+          element:<MainPage/>
         },
       ]);
 
