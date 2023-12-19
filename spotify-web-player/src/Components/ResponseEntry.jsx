@@ -1,18 +1,61 @@
 import React from "react";
 import "semantic-ui-css/semantic.min.css";
-import { Form } from "semantic-ui-react";
+import { Dropdown } from "semantic-ui-react";
 
 export default function ResponseEntry() {
+  const titres = [
+    {
+      key: "1",
+      text: "Musique 1",
+    },
+    {
+      key: "2",
+      text: "Musique 2",
+    },
+    {
+      key: "3",
+      text: "Musique 3",
+    },
+    {
+      key: "4",
+      text: "Musique 4",
+    },
+  ];
+
+  const artistes = [
+    {
+      key: "1",
+      text: "Artiste 1",
+    },
+    {
+      key: "2",
+      text: "Artiste 2",
+    },
+    {
+      key: "3",
+      text: "Artiste 3",
+    },
+    {
+      key: "4",
+      text: "Artiste 4",
+    },
+  ];
+
   return (
-    <Form>
-      <Form.Field>
-        <label>Titre</label>
-        <input placeholder="Titre" />
-      </Form.Field>
-      <Form.Field>
-        <label>Artiste</label>
-        <input placeholder="Artiste" />
-      </Form.Field>
-    </Form>
+    <div>
+      <Dropdown
+        placeholder="Choisissez un tire"
+        fluid
+        selection
+        options={titres}
+        style={{ marginBottom: "2em" }}
+      />
+      <Dropdown
+        placeholder="Choisissez un artiste"
+        fluid
+        selection
+        options={artistes}
+      />
+    </div>
   );
 }
