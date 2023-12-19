@@ -1,6 +1,6 @@
 import React from "react";
 import Playlist from "./Playlist";
-import { Grid, Segment } from "semantic-ui-react";
+import { Grid, Segment, Form, Input } from "semantic-ui-react";
 import Player from "./Player";
 
 export default function ListPlaylist() {
@@ -51,25 +51,27 @@ export default function ListPlaylist() {
   ));
 
   return (
-    <Grid columns={2}>
-      <Grid.Row>
-        {listPlaylist.map((playlist) =>
-          playlist.key % 2 ? (
-            <Grid.Column>
-              <Segment>{playlist}</Segment>{" "}
-            </Grid.Column>
-          ) : null
-        )}
-      </Grid.Row>
-      <Grid.Row>
-        {listPlaylist.map((playlist) =>
-          !playlist.key % 2 ? (
-            <Grid.Column>
-              <Segment>{playlist}</Segment>
-            </Grid.Column>
-          ) : null
-        )}
-      </Grid.Row>
-    </Grid>
+    <div>
+      <Grid columns={2}>
+        <Grid.Row>
+          {listPlaylist.map((playlist) =>
+            playlist.key % 2 ? (
+              <Grid.Column>
+                <Segment>{playlist}</Segment>{" "}
+              </Grid.Column>
+            ) : null
+          )}
+        </Grid.Row>
+        <Grid.Row>
+          {listPlaylist.map((playlist) =>
+            !playlist.key % 2 ? (
+              <Grid.Column>
+                <Segment>{playlist}</Segment>
+              </Grid.Column>
+            ) : null
+          )}
+        </Grid.Row>
+      </Grid>
+    </div>
   );
 }
