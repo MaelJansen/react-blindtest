@@ -49,12 +49,22 @@ io.on('connection', (socket) => {
 
   // We can write our socket event listeners in here...
   socket.on('join_room', (data) => {
-    const { username, room } = data;
+    const { username, room, profile_picture, spotify_user_id } = data;
+    
+    const existingUser = allUsers.find(user => user.spotify_user_id === spotify_user_id && user.room === room);
+
+    if (existingUser) {
+      // Do not allow multiple connections with the same Spotify account in the same room
+      console.log(`User ${username} with Spotify ID ${spotify_user_id} already connected in room ${room}`);
+      socket.emit('existing_user', { username, room });      
+      return;
+    }
+
     socket.join(room);
     console.log(`${username} joined room ${room}`);
     // Save the new user to the room
     chatRoom = room;
-    allUsers.push({ id: socket.id, username, room });
+    allUsers.push({ id: socket.id, username, room, profile_picture, spotify_user_id });
     chatRoomUsers = allUsers.filter((user) => user.room === room);
     socket.to(room).emit('chatroom_users', chatRoomUsers);
     socket.emit('chatroom_users', chatRoomUsers);
@@ -74,7 +84,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('leave_room', (data) => {
-    const { username, room } = data;
+    const { username, room, profile_picture, spotify_user_id } = data;
     socket.leave(room);
     const __createdtime__ = Date.now();
     // Remove user from memory

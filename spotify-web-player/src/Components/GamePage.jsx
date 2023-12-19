@@ -13,6 +13,7 @@ import { SocketContext } from "./context/SocketContext";
 export default function GamePage() {
   const username = localStorage.getItem("username");
   const room = localStorage.getItem("room");
+  const profile_picture = localStorage.getItem("profile_picture");
   
   const socket = React.useContext(SocketContext);
   const [players, setPlayers] = React.useState([]);
@@ -34,7 +35,7 @@ export default function GamePage() {
   };
 
   const listPlayers = players.map((player, index) => (
-    <Player key={index} name={player.username} />
+    <Player key={index} name={player.username}  profile_picture={player.profile_picture} />
   ));
   return (
     <div>
