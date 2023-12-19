@@ -1,16 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import TrackPlayer from './TrackPlayer';
 import { useParams } from 'react-router-dom';
+import TrackPlayer from './TrackPlayer';
+
+function shuffle(array) {
+    let currentIndex = array.length;
+    let randomIndex;
+
+    while (currentIndex !== 0) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+}
 
 function Quizz() {
-
     const { playlistId } = useParams();
-
     const [tracks, setTracks] = useState([]);
-    const [trackId, setTrackId] = useState("");
-
+    const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
     const token = localStorage.getItem('token');
 
     useEffect(() => {
@@ -22,6 +32,7 @@ function Quizz() {
                     }
                 });
                 const tracksData = response.data.items;
+                shuffle(tracksData);
                 setTracks(tracksData);
                 console.log('Playlist tracks:', tracksData);
             } catch (error) {
@@ -32,17 +43,24 @@ function Quizz() {
         getPlaylistTracks();
     }, [playlistId]);
 
+    const handleNextTrack = () => {
+        setCurrentTrackIndex((prevIndex) => prevIndex + 1);
+    };
+
+    const currentTrack = tracks[currentTrackIndex];
+
     return (
         <div>
             <h1>Quizz</h1>
-            {tracks.map((track) => (
-                <div key={track.track.id}>
-                    <h3>{track.track.name}</h3>
-                    <img src={track.track.album.images[0].url} alt={track.track.name} />
-                    <p>{track.track.artists[0].name}</p>
-                    <TrackPlayer trackId={track.track.id} token={token} />
+            {currentTrack && (
+                <div key={currentTrack.track.id}>
+                    <h3>{currentTrack.track.name}</h3>
+                    <img src={currentTrack.track.album.images[0].url} alt={currentTrack.track.name} />
+                    <p>{currentTrack.track.artists[0].name}</p>
+                    <TrackPlayer trackId={currentTrack.track.id} token={token} />
+                    <button onClick={handleNextTrack}>Next Track</button>
                 </div>
-            ))}
+            )}
         </div>
     );
 }
