@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function TrackPlayer({ trackId, token }) {
+function TrackPlayer({ trackId, token, onEnded  }) {
     const [previewUrl, setPreviewUrl] = useState("");
 
     useEffect(() => {
@@ -24,9 +24,14 @@ function TrackPlayer({ trackId, token }) {
         getTrackPreviewUrl();
     }, [trackId]);
 
+    const handleEnded = () => {
+        // Callback to notify the parent component (Quizz) that the track has ended
+        onEnded();
+    };
+
     return (
         <div>
-            <audio controls src={previewUrl}/>
+            <audio autoPlay controls src={previewUrl} onEnded={handleEnded} />
         </div>
     );
 }

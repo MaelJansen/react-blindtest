@@ -26,12 +26,28 @@ function Quizz() {
     useEffect(() => {
         async function getPlaylistTracks() {
             try {
-                const response = await axios.get(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                const tracksData = response.data.items;
+                let offset = 0;
+                let limit = 50;
+                let total = 0;
+                let tracksData = [];
+
+                do {
+                    const response = await axios.get(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                        params: {
+                            offset,
+                            limit
+                        }
+                    });
+
+                    const { items, total: responseTotal } = response.data;
+                    tracksData = [...tracksData, ...items];
+                    total = responseTotal;
+                    offset += limit;
+                } while (offset < total);
+
                 shuffle(tracksData);
                 setTracks(tracksData);
                 console.log('Playlist tracks:', tracksData);
@@ -47,6 +63,13 @@ function Quizz() {
         setCurrentTrackIndex((prevIndex) => prevIndex + 1);
     };
 
+    // Callback function to be passed to TrackPlayer component
+    const handleTrackEnded = () => {
+        // Logic to play the next track
+        handleNextTrack();
+    };
+
+
     const currentTrack = tracks[currentTrackIndex];
 
     return (
@@ -57,7 +80,7 @@ function Quizz() {
                     <h3>{currentTrack.track.name}</h3>
                     <img src={currentTrack.track.album.images[0].url} alt={currentTrack.track.name} />
                     <p>{currentTrack.track.artists[0].name}</p>
-                    <TrackPlayer trackId={currentTrack.track.id} token={token} />
+                    <TrackPlayer trackId={currentTrack.track.id} token={token} onEnded={handleTrackEnded} />
                     <button onClick={handleNextTrack}>Next Track</button>
                 </div>
             )}
