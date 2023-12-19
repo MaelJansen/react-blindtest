@@ -1,6 +1,7 @@
 import React from "react";
 import { Grid, Image, Segment, Button } from "semantic-ui-react";
 import Player from "./Player";
+import NavBar from "./NavBar";
 
 export default function () {
     let i = 0
@@ -55,15 +56,18 @@ export default function () {
     };
 
     return (
-        <Segment>
-            <Grid columns={4} textAlign="center" style={{ height: "85vh"}} verticalAlign="bottom" >
-                {classement()}
-                {classementPerdant()}
-            </Grid>
-            <Segment.Group horizontal>
-                    <Button color="green" fluid size="massive" type="submit">Rejouer</Button>
-                    <Button color="red" fluid size="massive" type="submit">Retour à l'accueil</Button>
-                </Segment.Group>
-        </Segment>
+        <div>
+            <NavBar></NavBar>
+            <Segment>
+                <Grid columns={4} textAlign="center" style={{ height: "75vh"}} verticalAlign="bottom" >
+                    {classement()}
+                    {classementPerdant()}
+                </Grid>
+                <Segment.Group horizontal>
+                        <Button color="green" fluid size="massive" type="submit">Rejouer</Button>
+                        <Button color="red" fluid size="massive" type="submit">Retour à l'accueil</Button>
+                    </Segment.Group>
+            </Segment>
+        </div>
         )
     }
