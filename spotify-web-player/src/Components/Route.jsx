@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import ReactDOM from "react-dom/client";
 import { Link } from "react-router-dom";
 import App from '../App';
@@ -8,23 +8,20 @@ import MainPage from './MainPage';
 import Tchat from './Tchat';
 
 
-import {
-    createBrowserRouter,
-    RouterProvider,
-  } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import GamePage from "./GamePage";
 
-  export default function (props) {
-    const router = createBrowserRouter([
-      
-        {
-          path: "/",
-          element:<App />
-        },
+export default function (props) {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <App />,
+    },
 
-        {
-          path: "/quizz/:playlistId",
-          element:<Quizz/>
-        },
+    {
+      path: "/quizz/:playlistId",
+      element: <Quizz />,
+    },
 
         {
           path: "/game",
@@ -46,5 +43,5 @@ import {
     <React.StrictMode>
       <RouterProvider router={router} />
     </React.StrictMode>
-  )
+  );
 }
