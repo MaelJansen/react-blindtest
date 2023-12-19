@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import WebPlayback from './Components/WebPlayback'
 import Login from './Components/Login'
 import './App.css';
-import TrackPlayer from './TrackPlayer';
-import Logout from './Logout';
-import MyPlaylists from './MyPlaylists';
+import Logout from './Components/Logout';
+import MyPlaylists from './Components/MyPlaylists';
 
 
 function App() {
@@ -28,7 +26,7 @@ function App() {
 
   return (
     <>
-        { (token === '') ? <Login/> :  <div><MyPlaylists token={token}/> <TrackPlayer trackId={trackId} token={token}/> <Logout/></div> }
+        { (token === '') ? <Login/> :  <div><MyPlaylists token={token}/><Logout/></div> }
     </>
   );
 }
