@@ -6,15 +6,14 @@ export default function Player(props) {
   return (
     <div
       style={{
-        padding: "1vh",
         textOverflow: "ellipsis",
         maxWidth: "30vw",
       }}
     >
-      <Label as="a" color={props.color} size="massive" image>
+      <Label as="a" color={props.color} size="huge" image>
         <Icon name="user" />
-        {props.name}
-        <LabelDetail>{props.score}</LabelDetail>
+        {props.score}
+        <LabelDetail>{props.name}</LabelDetail>
       </Label>
     </div>
   );
