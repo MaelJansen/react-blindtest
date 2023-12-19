@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext} from "react";
 import { useNavigate } from 'react-router-dom';
 import { Grid, Header, Form, Segment, Button } from "semantic-ui-react";
-import io from 'socket.io-client';
+import { SocketContext } from "./context/SocketContext";
 
-const socket = io.connect('http://localhost:5000');
-
-export default function MainPage() {
     
+export default function MainPage() {
+    const socket = useContext(SocketContext);
     const [username, setUsername] = useState('');
     const [room, setRoom] = useState('');
+    
     
     const navigate = useNavigate();
     const joinRoom = () => {
         if (room !== '' && username !== '') {
           socket.emit('join_room', { username, room });
+          localStorage.setItem('username', username);
+          localStorage.setItem('room', room);
+          navigate('/game', { replace: true } );
         }
-        navigate('/game', { replace: true });
       };
     
     return (

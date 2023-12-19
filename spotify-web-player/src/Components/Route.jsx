@@ -3,8 +3,9 @@ import ReactDOM from "react-dom/client";
 import { Link } from "react-router-dom";
 import App from '../App';
 import Quizz from './Quizz';
-import Game from './Game';
+import GamePage from './GamePage';
 import MainPage from './MainPage';
+import Tchat from './Tchat';
 
 
 import {
@@ -27,13 +28,18 @@ import {
 
         {
           path: "/game",
-          element:<Game/>
+          element:<GamePage/>
         },
 
         {
           path: "/mainpage",
           element:<MainPage/>
         },
+
+        {
+          path: "/tchat",
+          element:<Tchat/>
+        }
       ]);
 
   return (
