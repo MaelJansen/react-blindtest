@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import WebPlayback from './Components/WebPlayback'
 import Login from './Components/Login'
 import './App.css';
+import Logout from './Components/Logout';
+import MyPlaylists from './Components/MyPlaylists';
+
 
 function App() {
 
   const [token, setToken] = useState('');
+  const trackId = '25lTenJPmSfwCRZi2hjCcB';
+
 
   useEffect(() => {
 
@@ -13,6 +17,7 @@ function App() {
       const response = await fetch('/auth/token');
       const json = await response.json();
       setToken(json.access_token);
+      localStorage.setItem('token', json.access_token);
     }
 
     getToken();
@@ -21,7 +26,7 @@ function App() {
 
   return (
     <>
-        { (token === '') ? <Login/> : <WebPlayback token={token} /> }
+        { (token === '') ? <Login/> :  <div><MyPlaylists token={token}/><Logout/></div> }
     </>
   );
 }

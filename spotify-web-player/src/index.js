@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import Route from './Components/Route';
 import './index.css';
-import GamePage from './Components/GamePage';
-import ParameterPage from './Components/ParameterPage';
+import { BrowserRouter } from 'react-router-dom'
+
 
 ReactDOM.render(
   <React.StrictMode>
-      {/*<App />*/}
-      <ParameterPage />
+      <Route />
   </React.StrictMode>,
   document.getElementById('root')
 );
