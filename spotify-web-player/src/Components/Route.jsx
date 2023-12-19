@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Link } from "react-router-dom";
-import App from '../App';
-import Quizz from './Quizz';
-import GamePage from './GamePage';
-import MainPage from './MainPage';
-import Tchat from './Tchat';
+import App from "../App";
+import Quizz from "./Quizz";
+import Game from "./Game";
+import MainPage from "./MainPage";
+import Result from "./Result";
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 export default function (props) {
@@ -20,26 +21,26 @@ export default function (props) {
       element: <Quizz />,
     },
 
-        {
-          path: "/game",
-          element:<GamePage/>
-        },
-
-        {
-          path: "/mainpage",
-          element:<MainPage/>
+    {
+      path: "/game",
+      element: <GamePage />,
     },
 
-        {
-          path: "/result",
-          element:<Result/>
-            },
+    {
+      path: "/mainpage",
+      element: <MainPage />,
+    },
 
-        {
-          path: "/tchat",
-          element:<Tchat/>
-        }
-      ]);
+    {
+      path: "/result",
+      element: <Result />,
+    },
+
+    {
+      path: "/tchat",
+      element: <Tchat />,
+    },
+  ]);
 
   return (
     <React.StrictMode>
