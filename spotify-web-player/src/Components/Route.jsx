@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import App from "../App";
 import Quizz from "./Quizz";
 import Game from "./Game";
-import MainPage from "./MainPage";
+import MainPage from "./MainPage";import Result from './Result';
+
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import GamePage from "./GamePage";
@@ -30,6 +31,11 @@ export default function (props) {
       path: "/mainpage",
       element: <MainPage />,
     },
+
+        {
+          path: "/result",
+          element:<Result/>
+        },
   ]);
 
   return (
