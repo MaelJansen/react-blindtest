@@ -6,6 +6,8 @@ import Quizz from "./Quizz";
 import Game from "./Game";
 import MainPage from "./MainPage";
 import Result from "./Result";
+import Tchat from "./Tchat";
+import GamePage from "./GamePage";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
