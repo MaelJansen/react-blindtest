@@ -14,6 +14,9 @@ function shuffle(array) {
         [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
     }
 
+    // Filter out items without a preview_url
+    array = array.filter(item => item.track.preview_url !== null);
+
     return array;
 }
 
@@ -48,7 +51,7 @@ function Quizz() {
                     offset += limit;
                 } while (offset < total);
 
-                shuffle(tracksData);
+                tracksData = shuffle(tracksData);
                 setTracks(tracksData);
                 console.log('Playlist tracks:', tracksData);
             } catch (error) {
