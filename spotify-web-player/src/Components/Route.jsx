@@ -28,7 +28,12 @@ export default function (props) {
         {
           path: "/mainpage",
           element:<MainPage/>
-        },
+    },
+
+        {
+          path: "/result",
+          element:<Result/>
+            },
 
         {
           path: "/tchat",
