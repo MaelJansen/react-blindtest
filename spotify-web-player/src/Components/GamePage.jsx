@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import Player from "./Player";
 import "semantic-ui-css/semantic.min.css";
@@ -9,6 +9,7 @@ import ResponseEntry from "./ResponseEntry";
 import Game from "./Game";
 import { useNavigate, useParams } from "react-router-dom";
 import { SocketContext } from "./context/SocketContext";
+import MyPlaylists from "./MyPlaylists";
 import { TrackProvider } from "./SpotifyContext";
 
 export default function GamePage() {
@@ -20,6 +21,7 @@ export default function GamePage() {
   const socket = React.useContext(SocketContext);
   const [players, setPlayers] = React.useState([]);
   const navigate = useNavigate();
+  const [select, setSelect] = useState(false);
 
   useEffect(() => {
     socket.on("chatroom_users", (data) => {
@@ -67,7 +69,7 @@ export default function GamePage() {
                 }}
               >
                 {listPlayers}
-              <Button onClick={leaveRoom}>Quitter</Button>
+                <Button onClick={leaveRoom}>Quitter</Button>
               </Segment>
               <Segment>
                 <Tchat></Tchat>
