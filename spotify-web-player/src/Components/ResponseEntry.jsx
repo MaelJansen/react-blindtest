@@ -1,53 +1,52 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "semantic-ui-css/semantic.min.css";
 import { Dropdown } from "semantic-ui-react";
+import axios, { all } from "axios";
+import { TrackContext } from "./SpotifyContext";
 
 export default function ResponseEntry() {
-  const titres = [
-    {
-      key: "1",
-      text: "Musique 1",
-    },
-    {
-      key: "2",
-      text: "Musique 2",
-    },
-    {
-      key: "3",
-      text: "Musique 3",
-    },
-    {
-      key: "4",
-      text: "Musique 4",
-    },
-  ];
+  const [titles, setTitles] = useState([]);
+  const [artistes, setArtistes] = useState([]);
+  const { allTracks } = useContext(TrackContext);
 
-  const artistes = [
-    {
-      key: "1",
-      text: "Artiste 1",
-    },
-    {
-      key: "2",
-      text: "Artiste 2",
-    },
-    {
-      key: "3",
-      text: "Artiste 3",
-    },
-    {
-      key: "4",
-      text: "Artiste 4",
-    },
-  ];
+  useEffect(() => {
+    for (const track of Object.keys(allTracks)) {
+      const currentTrack = allTracks[track];
+      console.log(track, currentTrack);
+      console.log(track);
+      console.log("track : ", currentTrack.track.name);
+      if (titles.length < track.length) {
+        setTitles((prevTitles) => [
+          ...prevTitles,
+          {
+            key: currentTrack.track.name,
+            text: currentTrack.track.name,
+            value: currentTrack.track.name,
+          },
+        ]);
+      }
+      if (artistes.length < track.length) {
+        setArtistes((prevArtistes) => [
+          ...prevArtistes,
+          {
+            key: currentTrack.track.artists[0].name,
+            text: currentTrack.track.artists[0].name,
+            value: currentTrack.track.artists[0].name,
+          },
+        ]);
+      }
+    }
+    console.log("tracks: ", allTracks);
+  }, [allTracks]);
 
   return (
     <div>
+      {console.log("title :", titles)}
       <Dropdown
         placeholder="Choisissez un tire"
         fluid
         selection
-        options={titres}
+        options={titles}
         style={{ marginBottom: "2em" }}
       />
       <Dropdown

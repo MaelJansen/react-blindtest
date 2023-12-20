@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Card, Placeholder, Progress } from "semantic-ui-react";
+import Quizz from "./Quizz";
+import { TrackProvider } from "./SpotifyContext";
 
-export default function Game() {
+export default function Game(props) {
   const [percent, setPercent] = useState(0);
 
   useEffect(() => {
@@ -12,13 +14,7 @@ export default function Game() {
 
   return (
     <div>
-      <Card style={{ height: "100%", width: "auto" }}>
-        <Card.Content>
-          <Placeholder>
-            <Placeholder.Image square />
-          </Placeholder>
-        </Card.Content>
-      </Card>
+      <Quizz playlistId={props.playlistId}></Quizz>
       <Progress percent={percent} size="small" indicating />
     </div>
   );

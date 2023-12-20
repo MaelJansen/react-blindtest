@@ -4,6 +4,8 @@ import Player from "./Player";
 import { Grid, GridColumn, Segment, Input, Button } from "semantic-ui-react";
 import ListPlaylist from "./ListPlaylist";
 
+import { useNavigate } from "react-router-dom";
+
 export default function ParameterPage(props) {
   const players = [
     ["le mangeur de patates", "pink", "10"],
@@ -23,6 +25,11 @@ export default function ParameterPage(props) {
       <Player name={player[0]} color={player[1]} score={player[2]}></Player>
     </div>
   ));
+
+  const navigate = useNavigate();
+  function link() {
+    navigate("/game/0wxyvXL740AfqvgK1GVfar", { replace: true });
+  }
 
   return (
     <div>
@@ -51,7 +58,7 @@ export default function ParameterPage(props) {
               </div>
             ) : (
               <div>
-                <Button floated="left" size="huge" color="green">
+                <Button floated="left" size="huge" color="green" onClick={link}>
                   Je suis prêt(e)
                 </Button>
                 <Button floated="right" size="huge" color="red">
