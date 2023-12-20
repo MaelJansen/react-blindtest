@@ -3,8 +3,7 @@ import { Grid, Image, Segment, Button } from "semantic-ui-react";
 import Player from "./Player";
 import NavBar from "./NavBar";
 
-export default function () {
-    let i = 0
+export default function Result() {
     let sizes = 5
     const images = [ "premier.png", "deuxieme.png","troisieme.png"]
     const players = [
@@ -64,8 +63,8 @@ export default function () {
                     {classementPerdant()}
                 </Grid>
                 <Segment.Group horizontal>
-                        <Button color="green" fluid size="massive" type="submit">Rejouer</Button>
-                        <Button color="red" fluid size="massive" type="submit">Retour à l'accueil</Button>
+                        <Button color="green" fluid size="massive" onClick={() => window.location.href = "/"}>Rejouer</Button>
+                        <Button color="red" fluid size="massive" onClick={() => window.location.href = "/"}>Retour à l'accueil</Button>
                     </Segment.Group>
             </Segment>
         </div>
