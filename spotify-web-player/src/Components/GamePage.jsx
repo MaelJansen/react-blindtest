@@ -6,8 +6,11 @@ import NavBar from "./NavBar";
 import Tchat from "./Tchat";
 import ResponseEntry from "./ResponseEntry";
 import Game from "./Game";
+import { useParams } from "react-router-dom";
+import { TrackProvider } from "./SpotifyContext";
 
 export default function GamePage() {
+  const { playlistId } = useParams();
   const players = [
     ["le mangeur de patates", "pink", "10"],
     ["Joueur2", "blue", "10"],
@@ -33,10 +36,14 @@ export default function GamePage() {
         <Grid.Row>
           <Grid.Column width={11}>
             <Segment>
-              <Game></Game>
+              <TrackProvider>
+                <Game playlistId={playlistId}></Game>
+              </TrackProvider>
             </Segment>
             <Segment>
-              <ResponseEntry></ResponseEntry>
+              <TrackProvider>
+                <ResponseEntry playlistId={playlistId}></ResponseEntry>
+              </TrackProvider>
             </Segment>
           </Grid.Column>
 

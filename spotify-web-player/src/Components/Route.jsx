@@ -22,7 +22,7 @@ export default function (props) {
     },
 
     {
-      path: "/game",
+      path: "/game/:playlistId",
       element: <GamePage />,
     },
 

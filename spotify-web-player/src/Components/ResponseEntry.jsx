@@ -1,45 +1,22 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "semantic-ui-css/semantic.min.css";
 import { Dropdown } from "semantic-ui-react";
+import axios, { all } from "axios";
+import { TrackContext } from "./SpotifyContext";
 
-export default function ResponseEntry() {
-  const titres = [
-    {
-      key: "1",
-      text: "Musique 1",
-    },
-    {
-      key: "2",
-      text: "Musique 2",
-    },
-    {
-      key: "3",
-      text: "Musique 3",
-    },
-    {
-      key: "4",
-      text: "Musique 4",
-    },
-  ];
+export default function ResponseEntry(props) {
+  const [tracks, setTracks] = useState([]);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const token = localStorage.getItem("token");
+  const [titles, setTitles] = useState([]);
+  const [artistes, setArtistes] = useState([]);
+  const { alltracks, setAllTracks } = useContext(TrackContext);
 
-  const artistes = [
-    {
-      key: "1",
-      text: "Artiste 1",
-    },
-    {
-      key: "2",
-      text: "Artiste 2",
-    },
-    {
-      key: "3",
-      text: "Artiste 3",
-    },
-    {
-      key: "4",
-      text: "Artiste 4",
-    },
-  ];
+  useEffect(() => {
+    console.log("test");
+    console.log(alltracks);
+    console.log("test");
+  }, [alltracks]);
 
   return (
     <div>
@@ -47,7 +24,7 @@ export default function ResponseEntry() {
         placeholder="Choisissez un tire"
         fluid
         selection
-        options={titres}
+        options={titles}
         style={{ marginBottom: "2em" }}
       />
       <Dropdown

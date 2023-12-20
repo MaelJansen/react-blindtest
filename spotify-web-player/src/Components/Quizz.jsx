@@ -1,68 +1,80 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import TrackPlayer from './TrackPlayer';
+import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import TrackPlayer from "./TrackPlayer";
+import { TrackContext } from "./SpotifyContext";
 
 function shuffle(array) {
-    let currentIndex = array.length;
-    let randomIndex;
+  let currentIndex = array.length;
+  let randomIndex;
 
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
 
-        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-    }
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
 
-    return array;
+  return array;
 }
 
-function Quizz() {
-    const { playlistId } = useParams();
-    const [tracks, setTracks] = useState([]);
-    const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-    const token = localStorage.getItem('token');
+function Quizz(props) {
+  const { playlistId } = useParams();
+  const [tracks, setTracks] = useState([]);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const token = localStorage.getItem("token");
+  const allTracks = useContext(TrackContext);
 
-    useEffect(() => {
-        async function getPlaylistTracks() {
-            try {
-                const response = await axios.get(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                const tracksData = response.data.items;
-                shuffle(tracksData);
-                setTracks(tracksData);
-                console.log('Playlist tracks:', tracksData);
-            } catch (error) {
-                console.error('Error retrieving playlist tracks:', error);
-            }
-        }
+  useEffect(() => {
+    async function getPlaylistTracks() {
+      try {
+        const response = await axios.get(
+          `https://api.spotify.com/v1/playlists/${props.playlistId}/tracks`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const tracksData = response.data.items;
+        shuffle(tracksData);
+        setTracks(tracksData);
+        //allTracks.setAllTracks(tracksData);
+        console.log("Playlist tracks:", tracksData);
+      } catch (error) {
+        console.error("Error retrieving playlist tracks:", error);
+      }
+    }
 
-        getPlaylistTracks();
-    }, [playlistId]);
+    getPlaylistTracks();
+  }, [props.playlistId]);
 
-    const handleNextTrack = () => {
-        setCurrentTrackIndex((prevIndex) => prevIndex + 1);
-    };
+  const handleNextTrack = () => {
+    setCurrentTrackIndex((prevIndex) => prevIndex + 1);
+  };
 
-    const currentTrack = tracks[currentTrackIndex];
+  const currentTrack = tracks[currentTrackIndex];
 
-    return (
-        <div>
-            <h1>Quizz</h1>
-            {currentTrack && (
-                <div key={currentTrack.track.id}>
-                    <h3>{currentTrack.track.name}</h3>
-                    <img src={currentTrack.track.album.images[0].url} alt={currentTrack.track.name} />
-                    <p>{currentTrack.track.artists[0].name}</p>
-                    <TrackPlayer trackId={currentTrack.track.id} token={token} />
-                    <button onClick={handleNextTrack}>Next Track</button>
-                </div>
-            )}
+  return (
+    <div>
+      <h1>Quizz</h1>
+      {currentTrack && (
+        <div key={currentTrack.track.id}>
+          <h3>{currentTrack.track.name}</h3>
+          <img
+            src={currentTrack.track.album.images[0].url}
+            alt={currentTrack.track.name}
+          />
+          <p>{currentTrack.track.artists[0].name}</p>
+          <TrackPlayer trackId={currentTrack.track.id} token={token} />
+          <button onClick={handleNextTrack}>Next Track</button>
         </div>
-    );
+      )}
+    </div>
+  );
 }
 
 export default Quizz;
