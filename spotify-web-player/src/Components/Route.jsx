@@ -36,12 +36,7 @@ export default function (props) {
     {
       path: "/result",
       element: <Result />,
-    },
-
-    {
-      path: "/tchat",
-      element: <Tchat />,
-    },
+    }
   ]);
 
   return (

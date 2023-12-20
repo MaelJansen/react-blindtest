@@ -65,6 +65,7 @@ export default function MainPage({token}) {
                 <Form.Input
                 name="Code de la partie"
                 placeholder="Code de la partie"
+                autoComplete="off"
                 onChange={(e) => setRoom(e.target.value)}
                 />
                 <Form.Group widths="equal">
