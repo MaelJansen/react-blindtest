@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Grid, Header, Form, Segment, Button } from "semantic-ui-react";
+import { Grid, Header, Form, Segment, Icon } from "semantic-ui-react";
 import { SocketContext } from "./context/SocketContext";
+import NavBar from "./NavBar";
 
 export default function MainPage({ token }) {
   const socket = useContext(SocketContext);
@@ -57,30 +58,41 @@ export default function MainPage({ token }) {
     , [socket, navigate]);
     
     return (
-        <Grid textAlign="center" style={{ height: "90vh" }} verticalAlign="middle">
-            <Grid.Column style={{ maxWidth: 450 }}>
-            <Header as="h1" textAlign="center">
-            Spotify Guess
-            </Header>
-            <Form size="large">
-            <Segment stacked>
-                <Form.Input
-                name="Code de la partie"
-                placeholder="Code de la partie"
-                autoComplete="off"
-                onChange={(e) => setRoom(e.target.value)}
-                />
-                <Form.Group widths="equal">
-                    <Form.Button onClick={joinRoom} color="green" fluid size="large" type="submit">
-                    Rejoindre
-                    </Form.Button>
-                    <Form.Button color="green" fluid size="large" type="submit">
-                    Creer
-                    </Form.Button>
-                </Form.Group>
-            </Segment>
-            </Form>
-        </Grid.Column>
-        </Grid>
+        <div>
+        <NavBar/>
+            <Grid color="black" textAlign="center" style={{ height: "90vh",}} verticalAlign="middle">
+                <Grid.Column style={{maxWidth: "30em" }}>
+                    <Header as="h1" textAlign="center">
+                        Joindre une partie
+                    </Header>
+                    <Segment stacked>
+                        <Form size="large">
+                            <Form.Input
+                            name="Code de la partie"
+                            placeholder="Code de la partie"
+                            autoComplete="off"
+                            onChange={(e) => setRoom(e.target.value)}
+                            />
+                            <Form.Group widths="equal">
+                                <Form.Button fluid
+                                color="green" 
+                                size="large" 
+                                type="submit"
+                                onClick={joinRoom}
+                                >
+                                <Icon name='group'/> Rejoindre
+                                </Form.Button>
+                                <Form.Button inverted fluid
+                                color="green" 
+                                size="large" 
+                                type="submit">
+                                <Icon name='plus'/> Creer
+                                </Form.Button>
+                            </Form.Group>
+                        </Form>
+                    </Segment>
+                </Grid.Column>
+            </Grid>
+        </div>
     );
 }
