@@ -1,10 +1,9 @@
 import React from "react";
 import NavBar from "./NavBar";
 import Player from "./Player";
-import { Grid, Segment, Input, Button } from "semantic-ui-react";
-import ListPlaylist from "./ListPlaylist";
-
+import { Grid, GridColumn, Segment, Input, Button } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
+import { SocketContext } from "./context/SocketContext";
 
 export default function ParameterPage(props) {
   const username = localStorage.getItem("username");
@@ -22,10 +21,12 @@ export default function ParameterPage(props) {
     navigate("/", { replace: true });
   };
 
-  const listPlayers = players.map((player) => (
-    <div style={{ padding: "0.5em" }}>
-      <Player name={player[0]} color={player[1]} score={player[2]}></Player>
-    </div>
+  const listPlayers = players.map((player, index) => (
+    <Player
+      key={index}
+      name={player.username}
+      profile_picture={player.profile_picture}
+    />
   ));
 
   function link() {
