@@ -7,22 +7,30 @@ const SocketContext = createContext();
 
 const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
+    const [loading, setLoading] = React.useState(true);
+
     
     useEffect(() => {
         const newSocket = io.connect("http://localhost:5000");
-        setSocket(newSocket);
-        console.log("newSocket", newSocket);
 
-        console.log("connected", socket);
-    
+        newSocket.on('connect_error', (error) => {
+            console.error('Socket connection error:', error);
+        });
+
+        newSocket.on('connect', () => {
+            setLoading(false);
+        });
+
+        setSocket(newSocket);
+
         return () => {
             newSocket.close();
-        }
-    }, []);
+        };
+        }, []);
     
     return (
         <SocketContext.Provider value={socket}>
-            {children}
+            {!loading && children}
         </SocketContext.Provider>
     );
     }
