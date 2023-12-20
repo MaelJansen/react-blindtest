@@ -2,26 +2,28 @@ import React from "react";
 import NavBar from "./NavBar";
 import Player from "./Player";
 import { Grid, GridColumn, Segment, Input, Button } from "semantic-ui-react";
-import ListPlaylist from "./ListPlaylist";
+import { useNavigate } from "react-router-dom";
+import { SocketContext } from "./context/SocketContext";
+
 
 export default function ParameterPage(props) {
-  const players = [
-    ["le mangeur de patates", "pink", "10"],
-    ["Joueur2", "blue", "10"],
-    ["Joueur3", "green", "10"],
-    ["Joueur4", "red", "10"],
-    ["Joueur5", "teal", "10"],
-    ["le mangeur de patates", "pink", "10"],
-    ["Joueur2", "blue", "10"],
-    ["Joueur3", "green", "10"],
-    ["Joueur4", "red", "10"],
-    ["Joueur5", "teal", "10"],
-  ];
+  const username = localStorage.getItem("username");
+  const room = localStorage.getItem("room");
+  const profile_picture = localStorage.getItem("profile_picture");
 
-  const listPlayers = players.map((player) => (
-    <div style={{ padding: "0.5em" }}>
-      <Player name={player[0]} color={player[1]} score={player[2]}></Player>
-    </div>
+  const socket = React.useContext(SocketContext);
+  const [players, setPlayers] = React.useState([]);
+  const navigate = useNavigate();
+
+  const leaveRoom = () => {
+    const __createdtime__ = Date.now();
+    socket.emit('leave_room', { username, room, __createdtime__ });
+    // Redirect to home page
+    navigate('/', { replace: true });
+  };
+
+  const listPlayers = players.map((player, index) => (
+    <Player key={index} name={player.username}  profile_picture={player.profile_picture} />
   ));
 
   return (
@@ -54,7 +56,7 @@ export default function ParameterPage(props) {
                 <Button floated="left" size="huge" color="green">
                   Je suis prêt(e)
                 </Button>
-                <Button floated="right" size="huge" color="red">
+                <Button onClick={leaveRoom} floated="right" size="huge" color="red">
                   Quitter la partie
                 </Button>{" "}
               </div>
@@ -76,7 +78,6 @@ export default function ParameterPage(props) {
                 overflowX: "hidden",
               }}
             >
-              <ListPlaylist> </ListPlaylist>
             </div>
             {/*{listPlaylist}*/}
           </Grid.Column>

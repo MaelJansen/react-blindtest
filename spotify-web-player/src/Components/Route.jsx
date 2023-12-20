@@ -8,8 +8,10 @@ import MainPage from "./MainPage";
 import Result from "./Result";
 import Tchat from "./Tchat";
 import GamePage from "./GamePage";
+import MyPlaylists from "./MyPlaylists";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ParameterPage from "./ParameterPage";
 
 export default function (props) {
   const router = createBrowserRouter([
@@ -41,6 +43,11 @@ export default function (props) {
     {
       path: "/tchat",
       element: <Tchat />,
+    },
+
+    {
+      path: "/myplaylists",
+      element: <MyPlaylists />,
     },
   ]);
 
