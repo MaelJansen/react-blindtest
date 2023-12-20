@@ -67,6 +67,7 @@ export default function GamePage() {
                 }}
               >
                 {listPlayers}
+              <Button onClick={leaveRoom}>Quitter</Button>
               </Segment>
               <Segment>
                 <Tchat></Tchat>
