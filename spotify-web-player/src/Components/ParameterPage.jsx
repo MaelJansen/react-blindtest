@@ -22,10 +22,12 @@ export default function ParameterPage(props) {
     navigate("/", { replace: true });
   };
 
-  const listPlayers = players.map((player) => (
-    <div style={{ padding: "0.5em" }}>
-      <Player name={player[0]} color={player[1]} score={player[2]}></Player>
-    </div>
+  const listPlayers = players.map((player, index) => (
+    <Player
+      key={index}
+      name={player.username}
+      profile_picture={player.profile_picture}
+    />
   ));
 
   function link() {
