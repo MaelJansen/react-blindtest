@@ -84,7 +84,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('leave_room', (data) => {
-    const { username, room, profile_picture, spotify_user_id } = data;
+    const { username, room} = data;
     socket.leave(room);
     const __createdtime__ = Date.now();
     // Remove user from memory
@@ -92,10 +92,15 @@ io.on('connection', (socket) => {
     socket.to(room).emit('chatroom_users', allUsers);
     socket.to(room).emit('receive_message', {
       username: CHAT_BOT,
-      message: `${username} a quité la partie`,
+      message: `${username} a quitté la partie`,
       __createdtime__,
     });
     console.log(`${username} left room ${room}`);
+  });
+
+  socket.on('send_message', (data) => {
+    const { message, username, room, __createdtime__} = data;
+    io.to(room).emit('receive_message', { message, username, __createdtime__ });
   });
 });
 
