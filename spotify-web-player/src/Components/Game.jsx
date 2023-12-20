@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Placeholder, Progress } from "semantic-ui-react";
+import { Progress } from "semantic-ui-react";
 import Quizz from "./Quizz";
 import { TrackProvider } from "./SpotifyContext";
 

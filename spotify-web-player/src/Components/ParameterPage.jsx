@@ -1,7 +1,7 @@
 import React from "react";
 import NavBar from "./NavBar";
 import Player from "./Player";
-import { Grid, GridColumn, Segment, Input, Button } from "semantic-ui-react";
+import { Grid, Segment, Input, Button } from "semantic-ui-react";
 import ListPlaylist from "./ListPlaylist";
 
 import { useNavigate } from "react-router-dom";
