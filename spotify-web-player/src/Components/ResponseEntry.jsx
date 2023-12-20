@@ -4,22 +4,44 @@ import { Dropdown } from "semantic-ui-react";
 import axios, { all } from "axios";
 import { TrackContext } from "./SpotifyContext";
 
-export default function ResponseEntry(props) {
-  const [tracks, setTracks] = useState([]);
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const token = localStorage.getItem("token");
+export default function ResponseEntry() {
   const [titles, setTitles] = useState([]);
   const [artistes, setArtistes] = useState([]);
-  const { alltracks, setAllTracks } = useContext(TrackContext);
+  const { allTracks } = useContext(TrackContext);
 
   useEffect(() => {
-    console.log("test");
-    console.log(alltracks);
-    console.log("test");
-  }, [alltracks]);
+    for (const track of Object.keys(allTracks)) {
+      const currentTrack = allTracks[track];
+      console.log(track, currentTrack);
+      console.log(track);
+      console.log("track : ", currentTrack.track.name);
+      if (titles.length < track.length) {
+        setTitles((prevTitles) => [
+          ...prevTitles,
+          {
+            key: currentTrack.track.name,
+            text: currentTrack.track.name,
+            value: currentTrack.track.name,
+          },
+        ]);
+      }
+      if (artistes.length < track.length) {
+        setArtistes((prevArtistes) => [
+          ...prevArtistes,
+          {
+            key: currentTrack.track.artists[0].name,
+            text: currentTrack.track.artists[0].name,
+            value: currentTrack.track.artists[0].name,
+          },
+        ]);
+      }
+    }
+    console.log("tracks: ", allTracks);
+  }, [allTracks]);
 
   return (
     <div>
+      {console.log("title :", titles)}
       <Dropdown
         placeholder="Choisissez un tire"
         fluid

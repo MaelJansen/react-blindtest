@@ -14,10 +14,8 @@ export default function Game(props) {
 
   return (
     <div>
-      <TrackProvider>
-        <Quizz playlistId={props.playlistId}></Quizz>
-        <Progress percent={percent} size="small" indicating />
-      </TrackProvider>
+      <Quizz playlistId={props.playlistId}></Quizz>
+      <Progress percent={percent} size="small" indicating />
     </div>
   );
 }

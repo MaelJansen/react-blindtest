@@ -26,13 +26,13 @@ function Quizz(props) {
   const [tracks, setTracks] = useState([]);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const token = localStorage.getItem("token");
-  const allTracks = useContext(TrackContext);
+  const { allTracks, updateAllTracks } = useContext(TrackContext);
 
   useEffect(() => {
     async function getPlaylistTracks() {
       try {
         const response = await axios.get(
-          `https://api.spotify.com/v1/playlists/${props.playlistId}/tracks`,
+          `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -42,15 +42,16 @@ function Quizz(props) {
         const tracksData = response.data.items;
         shuffle(tracksData);
         setTracks(tracksData);
-        //allTracks.setAllTracks(tracksData);
-        console.log("Playlist tracks:", tracksData);
+        console.log("allTracks : ", allTracks);
+        updateAllTracks(tracksData);
+        console.log("Playlist tracks :", tracksData);
       } catch (error) {
         console.error("Error retrieving playlist tracks:", error);
       }
     }
 
     getPlaylistTracks();
-  }, [props.playlistId]);
+  }, [playlistId]);
 
   const handleNextTrack = () => {
     setCurrentTrackIndex((prevIndex) => prevIndex + 1);

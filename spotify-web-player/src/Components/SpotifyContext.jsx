@@ -6,8 +6,12 @@ const TrackContext = createContext();
 const TrackProvider = ({ children }) => {
   const [allTracks, setAllTracks] = useState([]);
 
+  const updateAllTracks = (newTracks) => {
+    setAllTracks(newTracks);
+  };
+
   return (
-    <TrackContext.Provider value={{ allTracks, setAllTracks }}>
+    <TrackContext.Provider value={{ allTracks, updateAllTracks }}>
       {children}
     </TrackContext.Provider>
   );

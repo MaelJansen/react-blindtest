@@ -32,36 +32,35 @@ export default function GamePage() {
   return (
     <div>
       <NavBar></NavBar>
-      <Grid columns={2} divided>
-        <Grid.Row>
-          <Grid.Column width={11}>
-            <Segment>
-              <TrackProvider>
-                <Game playlistId={playlistId}></Game>
-              </TrackProvider>
-            </Segment>
-            <Segment>
-              <TrackProvider>
-                <ResponseEntry playlistId={playlistId}></ResponseEntry>
-              </TrackProvider>
-            </Segment>
-          </Grid.Column>
 
-          <Grid.Column width={5}>
-            <Segment
-              style={{
-                overflowY: "scroll",
-                height: "50vh",
-              }}
-            >
-              {listPlayers}
-            </Segment>
-            <Segment>
-              <Tchat></Tchat>
-            </Segment>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+      <TrackProvider>
+        <Grid columns={2} divided>
+          <Grid.Row>
+            <Grid.Column width={11}>
+              <Segment>
+                <Game playlistId={playlistId}></Game>
+              </Segment>
+              <Segment>
+                <ResponseEntry playlistId={playlistId}></ResponseEntry>
+              </Segment>
+            </Grid.Column>
+
+            <Grid.Column width={5}>
+              <Segment
+                style={{
+                  overflowY: "scroll",
+                  height: "50vh",
+                }}
+              >
+                {listPlayers}
+              </Segment>
+              <Segment>
+                <Tchat></Tchat>
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </TrackProvider>
     </div>
   );
 }
