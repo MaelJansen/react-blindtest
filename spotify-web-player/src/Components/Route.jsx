@@ -5,9 +5,11 @@ import App from "../App";
 import Quizz from "./Quizz";
 import Game from "./Game";
 import MainPage from "./MainPage";
+import Result from "./Result";
+import Tchat from "./Tchat";
+import GamePage from "./GamePage";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import GamePage from "./GamePage";
 
 export default function (props) {
   const router = createBrowserRouter([
@@ -29,6 +31,16 @@ export default function (props) {
     {
       path: "/mainpage",
       element: <MainPage />,
+    },
+
+    {
+      path: "/result",
+      element: <Result />,
+    },
+
+    {
+      path: "/tchat",
+      element: <Tchat />,
     },
   ]);
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Login from './Components/Login'
 import './App.css';
 import Logout from './Components/Logout';
-import MyPlaylists from './Components/MyPlaylists';
+import Home from './Components/MainPage';
 
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
 
   return (
     <>
-        { (token === '') ? <Login/> :  <div><MyPlaylists token={token}/><Logout/></div> }
+        { (token === '') ? <Login/> :  <div><Home token= {token}/><Logout/></div> }
     </>
   );
 }
