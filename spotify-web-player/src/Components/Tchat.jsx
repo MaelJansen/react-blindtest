@@ -11,6 +11,19 @@ export default function Tchat() {
     console.log("socket is null");
   }
   const [messagesReceived, setMessagesReceived] = useState([]);
+  
+  const submitMessage = () => {
+    const message = document.getElementById('message').value;
+    if (message.trim() === '') {
+      return; // Do not send empty message
+    }
+    
+    document.getElementById('message').value = '';
+    const username = localStorage.getItem('username');
+    const room = localStorage.getItem('room');
+    const __createdtime__ = Date.now();
+    socket.emit('send_message', { message, username, room, __createdtime__ });
+  };
 
   useEffect(() => {
     socket.on('receive_message', (data) => {
@@ -23,14 +36,15 @@ export default function Tchat() {
           __createdtime__: data.__createdtime__,
         },
       ]);
+      const chatContainer = document.getElementById('chatContainer');
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     });
-
     return () => socket.off('receive_message');
   }, [socket]);
 
   return (
     <div>
-      <Feed style={{ overflowY: "scroll", height: "30vh" }}>
+      <Feed id="chatContainer" style={{ overflowY: "scroll", height: "30vh" }}>
         {messagesReceived.map((message, index) => (
           <Message
             key={index}
@@ -40,8 +54,15 @@ export default function Tchat() {
           />
         ))}
       </Feed>
-      <Form.Field style={{ paddingTop: "1em" }}>
-        <Input fluid placeholder="Dites quelque chose" icon="paper plane" />
+      <Form.Field 
+      style={{ paddingTop: "1em" }} 
+      autoComplete="off" 
+      onKeyPress={(e) => {
+          if (e.key === 'Enter') {
+            submitMessage();
+          }
+        }}>
+        <Input id="message" fluid placeholder="Dites quelque chose" icon="paper plane"/>
       </Form.Field>
     </div>
   );
