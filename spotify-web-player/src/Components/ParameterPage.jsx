@@ -59,7 +59,7 @@ export default function ParameterPage(props) {
               </div>
             ) : (
               <div>
-                <Button floated="left" size="huge" color="green" onClick={link}>
+                <Button floated="left" size="huge" color="green">
                   Je suis prêt(e)
                 </Button>
                 <Button

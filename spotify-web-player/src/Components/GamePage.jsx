@@ -16,7 +16,6 @@ export default function GamePage() {
   const username = localStorage.getItem("username");
   const room = localStorage.getItem("room");
   const profile_picture = localStorage.getItem("profile_picture");
-  const playlistId = useParams();
 
   const socket = React.useContext(SocketContext);
   const [players, setPlayers] = React.useState([]);
@@ -52,14 +51,21 @@ export default function GamePage() {
       <TrackProvider>
         <Grid columns={2} divided>
           <Grid.Row>
-            <Grid.Column width={11}>
-              <Segment>
-                <Game playlistId={playlistId}></Game>
-              </Segment>
-              <Segment>
-                <ResponseEntry playlistId={playlistId}></ResponseEntry>
-              </Segment>
-            </Grid.Column>
+            {!select ? (
+              <Grid.Column width={11}>
+                <MyPlaylists> </MyPlaylists>
+                <Button onClick={() => setSelect(true)}>Valider</Button>
+              </Grid.Column>
+            ) : (
+              <Grid.Column width={11}>
+                <Segment>
+                  <Game playlistId={playlistId}></Game>
+                </Segment>
+                <Segment>
+                  <ResponseEntry playlistId={playlistId}></ResponseEntry>
+                </Segment>
+              </Grid.Column>
+            )}
 
             <Grid.Column width={5}>
               <Segment
