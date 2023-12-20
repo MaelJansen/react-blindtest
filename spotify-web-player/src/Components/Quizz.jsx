@@ -70,7 +70,11 @@ function Quizz(props) {
             alt={currentTrack.track.name}
           />
           <p>{currentTrack.track.artists[0].name}</p>
-          <TrackPlayer trackId={currentTrack.track.id} token={token} />
+          <TrackPlayer
+            trackId={currentTrack.track.id}
+            token={token}
+            onEnded={handleNextTrack}
+          />
           <button onClick={handleNextTrack}>Next Track</button>
         </div>
       )}
