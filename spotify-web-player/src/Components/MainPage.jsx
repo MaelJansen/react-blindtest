@@ -8,12 +8,12 @@ export default function MainPage() {
     const navigate = useNavigate();
     const { joinRoom, createRoom } = useContext(PlayerContext);
 
-    const joinRoom1 = () => {
+    const joinRoomNavigate = () => {
       joinRoom();
       navigate("/parameter", { replace: true });
     }
 
-    const createRoom1 = () => {
+    const createRoomNavigate = () => {
       createRoom();
       navigate("/parameter", { replace: true });
     }
@@ -38,7 +38,7 @@ export default function MainPage() {
                                 color="green" 
                                 size="large" 
                                 type="submit"
-                                onClick={joinRoom1}
+                                onClick={joinRoomNavigate}
                                 >
                                 <Icon name='group'/> Rejoindre
                                 </Form.Button>
@@ -46,9 +46,9 @@ export default function MainPage() {
                                 color="green" 
                                 size="large" 
                                 type="submit"
-                                onClick={createRoom1}
+                                onClick={createRoomNavigate}
                                 >                        
-                                <Icon name='plus'/> Creer
+                                <Icon name='plus'/> Créer
                                 </Form.Button>
                             </Form.Group>
                         </Form>

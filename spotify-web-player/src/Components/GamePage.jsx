@@ -10,16 +10,14 @@ import Game from "./Game";
 import { useNavigate, useParams } from "react-router-dom";
 import { SocketContext } from "./context/SocketContext";
 import { TrackProvider } from "./SpotifyContext";
+import { PlayerContext } from "./context/PlayerContext";
 
 export default function GamePage() {
-  const username = localStorage.getItem("username");
-  const room = localStorage.getItem("room");
-  const profile_picture = localStorage.getItem("profile_picture");
-  const playlistId = useParams();
+  const { username, room, profile_picture, listPlayers, setlistPlayers } = React.useContext(PlayerContext);
 
+  const playlistId = useParams();
   const socket = React.useContext(SocketContext);
   const [players, setPlayers] = React.useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     socket.on("chatroom_users", (data) => {
@@ -29,20 +27,15 @@ export default function GamePage() {
     return () => socket.off("chatroom_users");
   }, [socket]);
 
-  const leaveRoom = () => {
-    const __createdtime__ = Date.now();
-    socket.emit("leave_room", { username, room, __createdtime__ });
-    // Redirect to home page
-    navigate("/", { replace: true });
-  };
-
-  const listPlayers = players.map((player, index) => (
+  const listPlayerslocal = players.map((player, index) => (
+    setlistPlayers([...listPlayers, player]),
     <Player
       key={index}
       name={player.username}
       profile_picture={player.profile_picture}
     />
   ));
+
   return (
     <div>
       <NavBar></NavBar>
@@ -66,8 +59,7 @@ export default function GamePage() {
                   height: "50vh",
                 }}
               >
-                {listPlayers}
-              <Button onClick={leaveRoom}>Quitter</Button>
+                {listPlayerslocal}
               </Segment>
               <Segment>
                 <Tchat></Tchat>

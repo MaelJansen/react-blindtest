@@ -4,9 +4,11 @@ import "semantic-ui-css/semantic.min.css";
 import { Form, Input, Feed } from "semantic-ui-react";
 import Message from "./Message";
 import { SocketContext } from "./context/SocketContext";
+import { PlayerContext } from "./context/PlayerContext";
 
 export default function Tchat() {
   const socket = useContext(SocketContext);
+  const { username, room } = useContext(PlayerContext);
   if (!socket) {
     console.log("socket is null");
   }
@@ -19,8 +21,6 @@ export default function Tchat() {
     }
     
     document.getElementById('message').value = '';
-    const username = localStorage.getItem('username');
-    const room = localStorage.getItem('room');
     const __createdtime__ = Date.now();
     socket.emit('send_message', { message, username, room, __createdtime__ });
   };

@@ -3,12 +3,15 @@ import { SocketContext } from "./SocketContext";
 
 const PlayerContext = createContext();
 
-const PlayerProvider = ({ token, children }) => {
+const PlayerProvider = ({ children }) => {
     const socket = useContext(SocketContext);
     const [room, setRoom] = useState(null);
     const [username, setUsername] = useState("");
     const [profile_picture, setProfilePicture] = useState("");
     const [spotify_user_id, setSpotifyUserId] = useState("");
+    const [playerList, setPlayerList] = useState([]);
+    const [token, setToken] = useState("");
+
 
     useEffect(() => {
         const getSpotifyUserInfo = async () => {
@@ -19,9 +22,11 @@ const PlayerProvider = ({ token, children }) => {
               },
             });
             const data = await response.json();
+            console.log("Spotify user info :", data);
             setUsername(data.display_name);
             setProfilePicture(data.images[0].url);
             setSpotifyUserId(data.id);
+            
           } catch (error) {
             console.error(error);
           }
@@ -63,14 +68,25 @@ const PlayerProvider = ({ token, children }) => {
         }
     }
 
+    const leaveRoom = () => {
+        const __createdtime__ = Date.now();
+        socket.emit("leave_room", { username, room, __createdtime__ });
+        setRoom(null);
+    }
+
     return (
         <PlayerContext.Provider value={{
             room,
             username,
             profile_picture,
             spotify_user_id,
+            playerList, 
+            token,
             createRoom,
-            joinRoom
+            joinRoom,
+            setPlayerList,
+            setToken,
+            leaveRoom,
         }}>
             {children}
         </PlayerContext.Provider>
