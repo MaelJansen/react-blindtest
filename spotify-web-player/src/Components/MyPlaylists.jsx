@@ -51,7 +51,6 @@ function MyPlaylists({ onSelectPlaylist }) {
                   >
                    
                     </Button>
-                    <p>{playlist.id}</p>
                     <h3>{playlist.name}</h3>
                     <Image
                       src={playlist.images[0].url}
@@ -78,7 +77,6 @@ function MyPlaylists({ onSelectPlaylist }) {
                     onClick={() => changeColor(playlist.id)}
                   >
                     </Button>
-                    <p>{playlist.id}</p>
                     <h3>{playlist.name}</h3>
                     <Image
                       src={playlist.images[0].url}
