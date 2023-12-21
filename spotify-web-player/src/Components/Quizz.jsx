@@ -5,21 +5,23 @@ import TrackPlayer from "./TrackPlayer";
 import { TrackContext } from "./SpotifyContext";
 
 function shuffle(array) {
+  
   let currentIndex = array.length;
   let randomIndex;
 
   while (currentIndex !== 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
 
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
   }
+
+  // Filter out items without a preview_url
+  array = array.filter(item => item.track.preview_url !== null);
 
   return array;
 }
+
 
 function Quizz(props) {
   const [tracks, setTracks] = useState([]);
@@ -30,20 +32,38 @@ function Quizz(props) {
   useEffect(() => {
     async function getPlaylistTracks() {
       try {
-        const response = await axios.get(
-          `https://api.spotify.com/v1/playlists/${props.playlistId}/tracks`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const tracksData = response.data.items;
-        shuffle(tracksData);
+        const limit = 50; // Maximum limit per request
+        let offset = 0;
+        let total=0;
+        let tracksData = [];
+
+        // Continue making requests until all tracks are retrieved
+        do {
+          const response = await axios.get(
+            `https://api.spotify.com/v1/playlists/${props.playlistId}/tracks`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              params: {
+                limit,
+                offset,
+              },
+            }
+          );
+          
+          const { items, total: totalItems } = response.data;
+          tracksData = [...tracksData, ...items];
+          total=totalItems;
+          offset += limit;
+          
+        }
+        while (offset < total);
+        
+
+        tracksData=shuffle(tracksData);
         setTracks(tracksData);
-        console.log("allTracks : ", allTracks);
         updateAllTracks(tracksData);
-        console.log("Playlist tracks :", tracksData);
       } catch (error) {
         console.error("Error retrieving playlist tracks:", error);
       }

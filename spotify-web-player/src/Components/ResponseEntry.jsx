@@ -10,34 +10,32 @@ export default function ResponseEntry() {
   const { allTracks } = useContext(TrackContext);
 
   useEffect(() => {
-    for (const track of Object.keys(allTracks)) {
-      const currentTrack = allTracks[track];
-      console.log(track, currentTrack);
-      console.log(track);
-      console.log("track : ", currentTrack.track.name);
-      if (titles.length < track.length) {
-        setTitles((prevTitles) => [
-          ...prevTitles,
-          {
-            key: currentTrack.track.name,
-            text: currentTrack.track.name,
-            value: currentTrack.track.name,
-          },
-        ]);
-      }
-      if (artistes.length < track.length) {
-        setArtistes((prevArtistes) => [
-          ...prevArtistes,
-          {
-            key: currentTrack.track.artists[0].name,
-            text: currentTrack.track.artists[0].name,
-            value: currentTrack.track.artists[0].name,
-          },
-        ]);
-      }
-    }
+    const shuffledTitles = shuffleArray(Object.keys(allTracks).map(track => allTracks[track].track.name));
+    const shuffledArtistes = shuffleArray(Object.keys(allTracks).map(track => allTracks[track].track.artists[0].name));
+
+    setTitles(shuffledTitles.map(title => ({
+      key: title,
+      text: title,
+      value: title,
+    })));
+
+    setArtistes(shuffledArtistes.map(artist => ({
+      key: artist,
+      text: artist,
+      value: artist,
+    })));
+
     console.log("tracks: ", allTracks);
   }, [allTracks]);
+
+  function shuffleArray(array) {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  }
 
   return (
     <div>
