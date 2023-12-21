@@ -10,43 +10,12 @@ export default function MainPage() {
 
     const joinRoomNavigate = () => {
       joinRoom();
-      navigate("/parameter", { replace: true });
+      navigate("/game", { replace: true });
     }
     const createRoomNavigate = () => {
       createRoom();
-      navigate("/parameter", { replace: true });
+      navigate("/game", { replace: true });
     }
-  };
-
-  useEffect(() => {
-    const getSpotifyUserInfo = async () => {
-      try {
-        const response = await fetch("https://api.spotify.com/v1/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        setUsername(data.display_name);
-        setProfilePicture(data.images[0].url);
-        setSpotifyUserId(data.id);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getSpotifyUserInfo();
-  }, [token]);
-
-    useEffect(() => {
-        socket.on('existing_user', ({ username, room }) => {
-            console.log(`User ${username} already connected in room ${room}`);
-            // Redirect to the homepage
-            navigate('/');
-          });
-            return () => socket.off('existing_user');
-    }
-    , [socket, navigate]);
     
     return (
       <div>
@@ -62,7 +31,7 @@ export default function MainPage() {
                           name="Code de la partie"
                           placeholder="Code de la partie"
                           autoComplete="off"
-                          id="roomCodeInput"                             />
+                          id="roomCodeInput" />
                           <Form.Group widths="equal">
                               <Form.Button fluid
                               color="green" 
@@ -87,4 +56,5 @@ export default function MainPage() {
           </Grid>
       </div>
     );
+
 }

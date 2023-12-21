@@ -12,6 +12,11 @@ const PlayerProvider = ({ children }) => {
     const [playerList, setPlayerList] = useState([]);
     const [token, setToken] = useState("");
 
+    const updatePlayerList = (newPlayerList) => {
+        setPlayerList(newPlayerList);
+    
+    }
+
 
     useEffect(() => {
         const getSpotifyUserInfo = async () => {
@@ -84,7 +89,7 @@ const PlayerProvider = ({ children }) => {
             token,
             createRoom,
             joinRoom,
-            setPlayerList,
+            updatePlayerList,
             setToken,
             leaveRoom,
         }}>
