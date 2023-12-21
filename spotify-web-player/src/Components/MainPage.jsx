@@ -12,7 +12,29 @@ export default function MainPage({ token }) {
   const [spotify_user_id, setSpotifyUserId] = useState("");
 
   const navigate = useNavigate();
+
+  const createRoom = () => {
+    if (username !== "") {
+        socket.emit("create_room", {
+            username,
+            profile_picture,
+            spotify_user_id,
+        });
+        localStorage.setItem("username", username);
+        localStorage.setItem("profile_picture", profile_picture);
+        localStorage.setItem("spotify_user_id", spotify_user_id);
+        socket.on("room_created", (data) => {
+            console.log(`room_created ${data}`);
+            setRoom(data);
+            localStorage.setItem("room", data);
+            navigate("/parameter", { replace: true });
+        }
+        );
+      }
+    };
+
   const joinRoom = () => {
+    const room = document.getElementById("roomCodeInput").value;
     if (room !== "" && username !== "") {
       socket.emit("join_room", {
         username,
@@ -23,7 +45,13 @@ export default function MainPage({ token }) {
       localStorage.setItem("username", username);
       localStorage.setItem("room", room);
       localStorage.setItem("profile_picture", profile_picture);
-      navigate("/parameter", { replace: true });
+
+      socket.on("room_code", (data) => {
+        console.log(`room_joined ${data}`);
+        setRoom(data);
+        navigate("/parameter", { replace: true });
+      });
+
     }
   };
 
@@ -71,8 +99,7 @@ export default function MainPage({ token }) {
                             name="Code de la partie"
                             placeholder="Code de la partie"
                             autoComplete="off"
-                            onChange={(e) => setRoom(e.target.value)}
-                            />
+                            id="roomCodeInput"                             />
                             <Form.Group widths="equal">
                                 <Form.Button fluid
                                 color="green" 
@@ -85,7 +112,9 @@ export default function MainPage({ token }) {
                                 <Form.Button inverted fluid
                                 color="green" 
                                 size="large" 
-                                type="submit">
+                                type="submit"
+                                onClick={createRoom}
+                                >                        
                                 <Icon name='plus'/> Creer
                                 </Form.Button>
                             </Form.Group>

@@ -5,6 +5,7 @@ const http = require('http');
 const cors = require('cors');
 const { Server } = require('socket.io');
 const leaveRoom = require('./utils/leave-room');
+const joinExistingRoom = require('./utils/join_existing_room');
 
 const port = 5000;
 const CHAT_BOT = 'ChatBot';
@@ -47,44 +48,52 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log(`User connected ${socket.id}`);
 
+  socket.on('create_room', (data) => {
+    const { username, profile_picture, spotify_user_id } = data;
+    const room = generateRandomString(6);
+    // You may emit an event here to send the room code back to the client, if needed
+    socket.emit('room_created', room);
+    joinExistingRoom(socket, room, username, profile_picture, spotify_user_id, allUsers, CHAT_BOT);
+  });
+
   // We can write our socket event listeners in here...
   socket.on('join_room', (data) => {
     const { username, room, profile_picture, spotify_user_id } = data;
-    
+
+    // Check if the room exists before allowing a user to join
+    console.log(username);
+    console.log(room);
+    console.log(io.sockets.adapter.rooms);
+
+    const roomExists = io.sockets.adapter.rooms.has(room);
+
+    if (!roomExists) {
+      console.log(`Room ${room} does not exist`);
+      // Emit an event to inform the client that the room doesn't exist
+      socket.emit('room_not_found', { room });
+      return;
+    }
+
     const existingUser = allUsers.find(user => user.spotify_user_id === spotify_user_id && user.room === room);
 
     if (existingUser) {
       // Do not allow multiple connections with the same Spotify account in the same room
       console.log(`User ${username} with Spotify ID ${spotify_user_id} already connected in room ${room}`);
-      socket.emit('existing_user', { username, room });      
+      socket.emit('existing_user', { username, room });
       return;
     }
 
-    socket.join(room);
-    console.log(`${username} joined room ${room}`);
-    // Save the new user to the room
-    chatRoom = room;
-    allUsers.push({ id: socket.id, username, room, profile_picture, spotify_user_id });
-    chatRoomUsers = allUsers.filter((user) => user.room === room);
-    socket.to(room).emit('chatroom_users', chatRoomUsers);
-    socket.emit('chatroom_users', chatRoomUsers);
-    let __createdtime__ = Date.now(); // Current timestamp
-    // Send message to all users currently in the room, apart from the user that just joined
-    socket.to(room).emit('receive_message', {
-      message: `${username} a rejoint la partie`,
-      username: CHAT_BOT,
-      __createdtime__,
-    });
-    // Send welcome msg to user that just joined chat only
-    socket.emit('receive_message', {
-      message: `Salut, ${username}`,
-      username: CHAT_BOT,
-      __createdtime__,
-    });
+    // Send the codeof the room to the client
+    socket.emit('room_code', room);
+
+    joinExistingRoom(socket, room, username, profile_picture, spotify_user_id, allUsers, CHAT_BOT);
+
+    
   });
 
   socket.on('leave_room', (data) => {
     const { username, room} = data;
+    socket.emit('room_code', null);
     socket.leave(room);
     const __createdtime__ = Date.now();
     // Remove user from memory
