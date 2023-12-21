@@ -1,90 +1,23 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
 import { Grid, Header, Form, Segment, Icon } from "semantic-ui-react";
-import { SocketContext } from "./context/SocketContext";
+import { PlayerContext } from "./context/PlayerContext";
 import NavBar from "./NavBar";
+import { useNavigate } from "react-router-dom";
 
-export default function MainPage({ token }) {
-  const socket = useContext(SocketContext);
-  const [username, setUsername] = useState("");
-  const [room, setRoom] = useState("");
-  const [profile_picture, setProfilePicture] = useState("");
-  const [spotify_user_id, setSpotifyUserId] = useState("");
+export default function MainPage() {
+    const navigate = useNavigate();
+    const { joinRoom, createRoom } = useContext(PlayerContext);
 
-  const navigate = useNavigate();
-
-  const createRoom = () => {
-    if (username !== "") {
-        socket.emit("create_room", {
-            username,
-            profile_picture,
-            spotify_user_id,
-        });
-        localStorage.setItem("username", username);
-        localStorage.setItem("profile_picture", profile_picture);
-        localStorage.setItem("spotify_user_id", spotify_user_id);
-        socket.on("room_created", (data) => {
-            console.log(`room_created ${data}`);
-            setRoom(data);
-            localStorage.setItem("room", data);
-            navigate("/parameter", { replace: true });
-        }
-        );
-      }
-    };
-
-  const joinRoom = () => {
-    const room = document.getElementById("roomCodeInput").value;
-    if (room !== "" && username !== "") {
-      socket.emit("join_room", {
-        username,
-        room,
-        profile_picture,
-        spotify_user_id,
-      });
-      localStorage.setItem("username", username);
-      localStorage.setItem("room", room);
-      localStorage.setItem("profile_picture", profile_picture);
-
-      socket.on("room_code", (data) => {
-        console.log(`room_joined ${data}`);
-        setRoom(data);
-        navigate("/parameter", { replace: true });
-      });
-
+    const joinRoom1 = () => {
+      joinRoom();
+      navigate("/parameter", { replace: true });
     }
-  };
 
-  useEffect(() => {
-    const getSpotifyUserInfo = async () => {
-      try {
-        const response = await fetch("https://api.spotify.com/v1/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        setUsername(data.display_name);
-        setProfilePicture(data.images[0].url);
-        setSpotifyUserId(data.id);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getSpotifyUserInfo();
-  }, [token]);
-
-    useEffect(() => {
-        socket.on('existing_user', ({ username, room }) => {
-            console.log(`User ${username} already connected in room ${room}`);
-            // Redirect to the homepage
-            navigate('/');
-          });
-            return () => socket.off('existing_user');
+    const createRoom1 = () => {
+      createRoom();
+      navigate("/parameter", { replace: true });
     }
-    , [socket, navigate]);
-    
+
     return (
         <div>
         <NavBar/>
@@ -105,7 +38,7 @@ export default function MainPage({ token }) {
                                 color="green" 
                                 size="large" 
                                 type="submit"
-                                onClick={joinRoom}
+                                onClick={joinRoom1}
                                 >
                                 <Icon name='group'/> Rejoindre
                                 </Form.Button>
@@ -113,7 +46,7 @@ export default function MainPage({ token }) {
                                 color="green" 
                                 size="large" 
                                 type="submit"
-                                onClick={createRoom}
+                                onClick={createRoom1}
                                 >                        
                                 <Icon name='plus'/> Creer
                                 </Form.Button>
