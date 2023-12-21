@@ -66,10 +66,12 @@ export default function GamePage() {
             ) : (
               <Grid.Column width={11}>
                 <Segment>
-                  <Game playlistId={playlistId}></Game>
+                  <Game playlistId={"55oo0fRxJKLdqpgcAGAPvO"}></Game>
                 </Segment>
                 <Segment>
-                  <ResponseEntry playlistId={playlistId}></ResponseEntry>
+                  <ResponseEntry
+                    playlistId={"55oo0fRxJKLdqpgcAGAPvO"}
+                  ></ResponseEntry>
                 </Segment>
               </Grid.Column>
             )}
