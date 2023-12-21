@@ -23,7 +23,7 @@ export default function MainPage({ token }) {
       localStorage.setItem("username", username);
       localStorage.setItem("room", room);
       localStorage.setItem("profile_picture", profile_picture);
-      navigate("/parameter", { replace: true });
+      navigate("/game", { replace: true });
     }
   };
 
@@ -47,52 +47,60 @@ export default function MainPage({ token }) {
     getSpotifyUserInfo();
   }, [token]);
 
-    useEffect(() => {
-        socket.on('existing_user', ({ username, room }) => {
-            console.log(`User ${username} already connected in room ${room}`);
-            // Redirect to the homepage
-            navigate('/');
-          });
-            return () => socket.off('existing_user');
-    }
-    , [socket, navigate]);
-    
-    return (
-        <div>
-        <NavBar/>
-            <Grid color="black" textAlign="center" style={{ height: "90vh",}} verticalAlign="middle">
-                <Grid.Column style={{maxWidth: "30em" }}>
-                    <Header as="h1" textAlign="center">
-                        Joindre une partie
-                    </Header>
-                    <Segment stacked>
-                        <Form size="large">
-                            <Form.Input
-                            name="Code de la partie"
-                            placeholder="Code de la partie"
-                            autoComplete="off"
-                            onChange={(e) => setRoom(e.target.value)}
-                            />
-                            <Form.Group widths="equal">
-                                <Form.Button fluid
-                                color="green" 
-                                size="large" 
-                                type="submit"
-                                onClick={joinRoom}
-                                >
-                                <Icon name='group'/> Rejoindre
-                                </Form.Button>
-                                <Form.Button inverted fluid
-                                color="green" 
-                                size="large" 
-                                type="submit">
-                                <Icon name='plus'/> Creer
-                                </Form.Button>
-                            </Form.Group>
-                        </Form>
-                    </Segment>
-                </Grid.Column>
-            </Grid>
-        </div>
-    );
+  useEffect(() => {
+    socket.on("existing_user", ({ username, room }) => {
+      console.log(`User ${username} already connected in room ${room}`);
+      // Redirect to the homepage
+      navigate("/");
+    });
+    return () => socket.off("existing_user");
+  }, [socket, navigate]);
+
+  return (
+    <div>
+      <NavBar />
+      <Grid
+        color="black"
+        textAlign="center"
+        style={{ height: "90vh" }}
+        verticalAlign="middle"
+      >
+        <Grid.Column style={{ maxWidth: "30em" }}>
+          <Header as="h1" textAlign="center">
+            Joindre une partie
+          </Header>
+          <Segment stacked>
+            <Form size="large">
+              <Form.Input
+                name="Code de la partie"
+                placeholder="Code de la partie"
+                autoComplete="off"
+                onChange={(e) => setRoom(e.target.value)}
+              />
+              <Form.Group widths="equal">
+                <Form.Button
+                  fluid
+                  color="green"
+                  size="large"
+                  type="submit"
+                  onClick={joinRoom}
+                >
+                  <Icon name="group" /> Rejoindre
+                </Form.Button>
+                <Form.Button
+                  inverted
+                  fluid
+                  color="green"
+                  size="large"
+                  type="submit"
+                >
+                  <Icon name="plus" /> Creer
+                </Form.Button>
+              </Form.Group>
+            </Form>
+          </Segment>
+        </Grid.Column>
+      </Grid>
+    </div>
+  );
 }
