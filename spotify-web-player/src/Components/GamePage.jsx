@@ -27,14 +27,28 @@ export default function GamePage() {
       console.log(data);
       setPlayers(data);
     });
-    return () => socket.off("chatroom_users");
-  }, [socket]);
+    socket.on("game_started", () => {
+      // Redirect to the game page when the game starts
+      setShouldShow(true);
+    });
+
+
+    return () => {
+      socket.off("chatroom_users");
+      socket.off("game_started");
+    }
+  }, [socket, navigate, room]);
 
   const leaveRoom = () => {
     const __createdtime__ = Date.now();
     socket.emit("leave_room", { username, room, __createdtime__ });
     // Redirect to home page
     navigate("/", { replace: true });
+  };
+
+  const startGame = () => {
+    // Emit 'start_game' event to the server
+    socket.emit("start_game", { room });
   };
 
   const listPlayers = players.map((player, index) => (

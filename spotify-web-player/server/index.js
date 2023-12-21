@@ -98,6 +98,13 @@ io.on('connection', (socket) => {
     console.log(`${username} left room ${room}`);
   });
 
+  // Listen for 'start_game' event
+  socket.on('start_game', (data) => {
+    const { room } = data;
+    // Broadcast to all clients in the room that the game has started
+    io.to(room).emit('game_started');
+  });
+
   socket.on('send_message', (data) => {
     const { message, username, room, __createdtime__} = data;
     io.to(room).emit('receive_message', { message, username, __createdtime__ });
