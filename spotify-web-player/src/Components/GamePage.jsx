@@ -53,7 +53,14 @@ export default function GamePage() {
           <Grid.Row>
             {!select ? (
               <Grid.Column width={11}>
-                <MyPlaylists> </MyPlaylists>
+                <Segment
+                  style={{
+                    overflowY: "scroll",
+                    height: "80vh",
+                  }}
+                >
+                  <MyPlaylists> </MyPlaylists>
+                </Segment>
                 <Button onClick={() => setSelect(true)}>Valider</Button>
               </Grid.Column>
             ) : (
@@ -71,7 +78,7 @@ export default function GamePage() {
               <Segment
                 style={{
                   overflowY: "scroll",
-                  height: "50vh",
+                  height: "40vh",
                 }}
               >
                 {listPlayers}

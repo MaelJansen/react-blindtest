@@ -46,8 +46,8 @@ export default function (props) {
     },
 
     {
-      path: "/myplaylists",
-      element: <MyPlaylists />,
+      path: "/game",
+      element: <GamePage />,
     },
   ]);
 

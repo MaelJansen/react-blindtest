@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Quizz from "./Quizz";
 import { Link } from "react-router-dom";
-import { Button, Image, Grid, Segment } from "semantic-ui-react";
+import { Button, Image, Grid, Segment, Checkbox } from "semantic-ui-react";
 
 function MyPlaylists() {
   const [playlists, setPlaylists] = useState([]);
+
+  function changeColor(id) {}
 
   useEffect(() => {
     async function getMyPlaylists() {
@@ -37,15 +39,23 @@ function MyPlaylists() {
             playlist.key % 2 ? (
               <Grid.Column>
                 <Segment>
-                  <h3>{playlist.name}</h3>
-                  <Image
-                    src={playlist.images[0].url}
-                    alt={playlist.name}
-                    size="small"
-                  />
-                  <p>{playlist.tracks.total} tracks</p>
-                  <p>{playlist.description}</p>
-                </Segment>{" "}
+                  <Button
+                    fluid
+                    color="black"
+                    basic
+                    onClick={changeColor(playlist.key)}
+                    id={"button" + playlist.key}
+                  >
+                    <h3>{playlist.name}</h3>
+                    <Image
+                      src={playlist.images[0].url}
+                      alt={playlist.name}
+                      size="small"
+                    />
+                    <p>{playlist.tracks.total} tracks</p>
+                    <p>{playlist.description}</p>
+                  </Button>
+                </Segment>
               </Grid.Column>
             ) : null
           )}
@@ -55,14 +65,16 @@ function MyPlaylists() {
             !playlist.key % 2 ? (
               <Grid.Column>
                 <Segment>
-                  <h3>{playlist.name}</h3>
-                  <Image
-                    src={playlist.images[0].url}
-                    alt={playlist.name}
-                    size="small"
-                  />
-                  <p>{playlist.tracks.total} tracks</p>
-                  <p>{playlist.description}</p>
+                  <Button fluid color="black" basic>
+                    <h3>{playlist.name}</h3>
+                    <Image
+                      src={playlist.images[0].url}
+                      alt={playlist.name}
+                      size="small"
+                    />
+                    <p>{playlist.tracks.total} tracks</p>
+                    <p>{playlist.description}</p>
+                  </Button>
                 </Segment>
               </Grid.Column>
             ) : null
