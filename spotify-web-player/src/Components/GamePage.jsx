@@ -29,7 +29,7 @@ export default function GamePage() {
     });
     socket.on("game_started", () => {
       // Redirect to the game page when the game starts
-      setShouldShow(true);
+      setSelect(true);
     });
 
 
@@ -75,7 +75,7 @@ export default function GamePage() {
                 >
                   <MyPlaylists> </MyPlaylists>
                 </Segment>
-                <Button onClick={() => setSelect(true)}>Valider</Button>
+                <Button onClick={startGame}>Valider</Button>
               </Grid.Column>
             ) : (
               <Grid.Column width={11}>
