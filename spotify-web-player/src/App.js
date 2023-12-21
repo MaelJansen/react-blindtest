@@ -3,13 +3,11 @@ import Login from './Components/Login'
 import './App.css';
 import Logout from './Components/Logout';
 import Home from './Components/MainPage';
+import { PlayerContext } from './Components/context/PlayerContext';
 
 
 function App() {
-
-  const [token, setToken] = useState('');
-  const trackId = '25lTenJPmSfwCRZi2hjCcB';
-
+  const { token,setToken } = React.useContext(PlayerContext);
 
   useEffect(() => {
 
