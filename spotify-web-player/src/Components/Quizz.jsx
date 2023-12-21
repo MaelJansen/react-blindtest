@@ -22,7 +22,6 @@ function shuffle(array) {
 }
 
 function Quizz(props) {
-  const { playlistId } = useParams();
   const [tracks, setTracks] = useState([]);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const token = localStorage.getItem("token");
@@ -33,7 +32,7 @@ function Quizz(props) {
     async function getPlaylistTracks() {
       try {
         const response = await axios.get(
-          `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+          `https://api.spotify.com/v1/playlists/${props.playlistId}/tracks`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -52,7 +51,7 @@ function Quizz(props) {
     }
 
     getPlaylistTracks();
-  }, [playlistId]);
+  }, [props.playlistId]);
 
   const handleNextTrack = () => {
     setCurrentTrackIndex((prevIndex) => prevIndex + 1);

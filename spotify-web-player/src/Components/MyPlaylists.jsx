@@ -4,10 +4,14 @@ import Quizz from "./Quizz";
 import { Link } from "react-router-dom";
 import { Button, Image, Grid, Segment, Checkbox } from "semantic-ui-react";
 
-function MyPlaylists() {
+function MyPlaylists({ onSelectPlaylist }) {
   const [playlists, setPlaylists] = useState([]);
 
-  function changeColor(id) {}
+  const changeColor = (playlistId) => {
+    // Call the onSelectPlaylist callback with the playlist ID
+    onSelectPlaylist(playlistId);
+    console.log("playlistId", playlistId);
+  };
 
   useEffect(() => {
     async function getMyPlaylists() {
@@ -43,9 +47,10 @@ function MyPlaylists() {
                     fluid
                     color="black"
                     basic
-                    onClick={changeColor(playlist.key)}
-                    id={"button" + playlist.key}
+                    onClick={() => changeColor(playlist.id)}
                   >
+                   
+                    </Button>
                     <h3>{playlist.name}</h3>
                     <Image
                       src={playlist.images[0].url}
@@ -54,7 +59,7 @@ function MyPlaylists() {
                     />
                     <p>{playlist.tracks.total} tracks</p>
                     <p>{playlist.description}</p>
-                  </Button>
+                  
                 </Segment>
               </Grid.Column>
             ) : null
@@ -65,7 +70,13 @@ function MyPlaylists() {
             !playlist.key % 2 ? (
               <Grid.Column>
                 <Segment>
-                  <Button fluid color="black" basic>
+                <Button
+                    fluid
+                    color="black"
+                    basic
+                    onClick={() => changeColor(playlist.id)}
+                  >
+                    </Button>
                     <h3>{playlist.name}</h3>
                     <Image
                       src={playlist.images[0].url}
@@ -74,7 +85,7 @@ function MyPlaylists() {
                     />
                     <p>{playlist.tracks.total} tracks</p>
                     <p>{playlist.description}</p>
-                  </Button>
+                  
                 </Segment>
               </Grid.Column>
             ) : null

@@ -4,7 +4,7 @@ import { Grid, Header, Form, Segment, Icon } from "semantic-ui-react";
 import { SocketContext } from "./context/SocketContext";
 import NavBar from "./NavBar";
 
-export default function MainPage({ token }) {
+export default function MainPage() {
   const socket = useContext(SocketContext);
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
@@ -32,7 +32,7 @@ export default function MainPage({ token }) {
       try {
         const response = await fetch("https://api.spotify.com/v1/me", {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
         const data = await response.json();
@@ -45,7 +45,7 @@ export default function MainPage({ token }) {
     };
 
     getSpotifyUserInfo();
-  }, [token]);
+  }, [localStorage.getItem("token")]);
 
   useEffect(() => {
     socket.on("existing_user", ({ username, room }) => {
