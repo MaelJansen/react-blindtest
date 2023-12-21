@@ -11,6 +11,18 @@ function MyPlaylists({ onSelectPlaylist }) {
     // Call the onSelectPlaylist callback with the playlist ID
     onSelectPlaylist(playlistId);
     console.log("playlistId", playlistId);
+
+    // change the color of the selected playlist
+    const playlist = document.getElementById(playlistId);
+    playlist.className = "ui button green fluid";
+
+    // reset the color of the other playlists
+    const playlists = document.getElementsByClassName("ui button green fluid");
+    for (let i = 0; i < playlists.length; i++) {
+      if (playlists[i].id !== playlistId) {
+        playlists[i].className = "ui black basic fluid button";
+      }
+    }
   };
 
   useEffect(() => {
@@ -48,9 +60,8 @@ function MyPlaylists({ onSelectPlaylist }) {
                     color="black"
                     basic
                     onClick={() => changeColor(playlist.id)}
+                    id={playlist.id}
                   >
-                   
-                    </Button>
                     <h3>{playlist.name}</h3>
                     <Image
                       src={playlist.images[0].url}
@@ -59,7 +70,7 @@ function MyPlaylists({ onSelectPlaylist }) {
                     />
                     <p>{playlist.tracks.total} tracks</p>
                     <p>{playlist.description}</p>
-                  
+                  </Button>
                 </Segment>
               </Grid.Column>
             ) : null
@@ -70,13 +81,13 @@ function MyPlaylists({ onSelectPlaylist }) {
             !playlist.key % 2 ? (
               <Grid.Column>
                 <Segment>
-                <Button
+                  <Button
                     fluid
                     color="black"
                     basic
                     onClick={() => changeColor(playlist.id)}
+                    id={playlist.id}
                   >
-                    </Button>
                     <h3>{playlist.name}</h3>
                     <Image
                       src={playlist.images[0].url}
@@ -85,7 +96,7 @@ function MyPlaylists({ onSelectPlaylist }) {
                     />
                     <p>{playlist.tracks.total} tracks</p>
                     <p>{playlist.description}</p>
-                  
+                  </Button>
                 </Segment>
               </Grid.Column>
             ) : null
