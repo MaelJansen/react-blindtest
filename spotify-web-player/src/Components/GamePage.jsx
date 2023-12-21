@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import Player from "./Player";
 import "semantic-ui-css/semantic.min.css";
@@ -9,6 +9,7 @@ import ResponseEntry from "./ResponseEntry";
 import Game from "./Game";
 import { useNavigate, useParams } from "react-router-dom";
 import { SocketContext } from "./context/SocketContext";
+import MyPlaylists from "./MyPlaylists";
 import { TrackProvider } from "./SpotifyContext";
 import { PlayerContext } from "./context/PlayerContext";
 
@@ -18,14 +19,45 @@ export default function GamePage() {
   const playlistId = useParams();
   const socket = React.useContext(SocketContext);
   const [players, setPlayers] = React.useState([]);
+  const navigate = useNavigate();
+  const [select, setSelect] = useState(false);
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
+
 
   useEffect(() => {
     socket.on("chatroom_users", (data) => {
       console.log(data);
       setPlayers(data);
     });
-    return () => socket.off("chatroom_users");
-  }, [socket]);
+    socket.on("game_started", () => {
+      // Redirect to the game page when the game starts
+      setSelect(true);
+    });
+
+
+    return () => {
+      socket.off("chatroom_users");
+      socket.off("game_started");
+    }
+  }, [socket, navigate, room]);
+
+  const leaveRoom = () => {
+    const __createdtime__ = Date.now();
+    socket.emit("leave_room", { username, room, __createdtime__ });
+    // Redirect to home page
+    navigate("/", { replace: true });
+  };
+
+  const startGame = () => {
+    if (selectedPlaylistId) {
+      console.log("selectedPlaylistId", selectedPlaylistId);
+      // Emit 'start_game' event to the server with the selected playlist ID
+      socket.emit("start_game", { room, playlistId: selectedPlaylistId });
+    } else {
+      // Handle the case when no playlist is selected
+      console.log("Please select a playlist before starting the game");
+    }
+  };
 
   const listPlayerslocal = players.map((player, index) => (
     setlistPlayers([...listPlayers, player]),
@@ -43,20 +75,36 @@ export default function GamePage() {
       <TrackProvider>
         <Grid columns={2} divided>
           <Grid.Row>
-            <Grid.Column width={11}>
-              <Segment>
-                <Game playlistId={playlistId}></Game>
-              </Segment>
-              <Segment>
-                <ResponseEntry playlistId={playlistId}></ResponseEntry>
-              </Segment>
-            </Grid.Column>
+            {!select ? (
+              <Grid.Column width={11}>
+                <Segment
+                  style={{
+                    overflowY: "scroll",
+                    height: "80vh",
+                  }}
+                >
+                  <MyPlaylists onSelectPlaylist={(id) => setSelectedPlaylistId(id)} />
+                </Segment>
+                <Button onClick={startGame}>Valider</Button>
+              </Grid.Column>
+            ) : (
+              <Grid.Column width={11}>
+                <Segment>
+                  <Game playlistId={selectedPlaylistId}></Game>
+                </Segment>
+                <Segment>
+                  <ResponseEntry
+                    playlistId={selectedPlaylistId}
+                  ></ResponseEntry>
+                </Segment>
+              </Grid.Column>
+            )}
 
             <Grid.Column width={5}>
               <Segment
                 style={{
                   overflowY: "scroll",
-                  height: "50vh",
+                  height: "40vh",
                 }}
               >
                 {listPlayerslocal}

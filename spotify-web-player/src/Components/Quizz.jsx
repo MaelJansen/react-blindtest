@@ -22,17 +22,17 @@ function shuffle(array) {
 }
 
 function Quizz(props) {
-  const { playlistId } = useParams();
   const [tracks, setTracks] = useState([]);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const token = localStorage.getItem("token");
   const { allTracks, updateAllTracks } = useContext(TrackContext);
+  const { currentTrack, updateCurrentTrack } = useContext(TrackContext);
 
   useEffect(() => {
     async function getPlaylistTracks() {
       try {
         const response = await axios.get(
-          `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+          `https://api.spotify.com/v1/playlists/${props.playlistId}/tracks`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -51,27 +51,28 @@ function Quizz(props) {
     }
 
     getPlaylistTracks();
-  }, [playlistId]);
+  }, [props.playlistId]);
 
   const handleNextTrack = () => {
     setCurrentTrackIndex((prevIndex) => prevIndex + 1);
   };
 
-  const currentTrack = tracks[currentTrackIndex];
+  const currentTrackLocal = tracks[currentTrackIndex];
 
   return (
     <div>
+      {updateCurrentTrack(tracks[currentTrackIndex])}
       <h1>Quizz</h1>
-      {currentTrack && (
-        <div key={currentTrack.track.id}>
-          <h3>{currentTrack.track.name}</h3>
+      {currentTrackLocal && (
+        <div key={currentTrackLocal.track.id}>
+          <h3>{currentTrackLocal.track.name}</h3>
           <img
-            src={currentTrack.track.album.images[0].url}
-            alt={currentTrack.track.name}
+            src={currentTrackLocal.track.album.images[0].url}
+            alt={currentTrackLocal.track.name}
           />
-          <p>{currentTrack.track.artists[0].name}</p>
+          <p>{currentTrackLocal.track.artists[0].name}</p>
           <TrackPlayer
-            trackId={currentTrack.track.id}
+            trackId={currentTrackLocal.track.id}
             token={token}
             onEnded={handleNextTrack}
           />

@@ -12,49 +12,79 @@ export default function MainPage() {
       joinRoom();
       navigate("/parameter", { replace: true });
     }
-
     const createRoomNavigate = () => {
       createRoom();
       navigate("/parameter", { replace: true });
     }
+  };
 
+  useEffect(() => {
+    const getSpotifyUserInfo = async () => {
+      try {
+        const response = await fetch("https://api.spotify.com/v1/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        setUsername(data.display_name);
+        setProfilePicture(data.images[0].url);
+        setSpotifyUserId(data.id);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getSpotifyUserInfo();
+  }, [token]);
+
+    useEffect(() => {
+        socket.on('existing_user', ({ username, room }) => {
+            console.log(`User ${username} already connected in room ${room}`);
+            // Redirect to the homepage
+            navigate('/');
+          });
+            return () => socket.off('existing_user');
+    }
+    , [socket, navigate]);
+    
     return (
-        <div>
-        <NavBar/>
-            <Grid color="black" textAlign="center" style={{ height: "90vh",}} verticalAlign="middle">
-                <Grid.Column style={{maxWidth: "30em" }}>
-                    <Header as="h1" textAlign="center">
-                        Joindre une partie
-                    </Header>
-                    <Segment stacked>
-                        <Form size="large">
-                            <Form.Input
-                            name="Code de la partie"
-                            placeholder="Code de la partie"
-                            autoComplete="off"
-                            id="roomCodeInput"                             />
-                            <Form.Group widths="equal">
-                                <Form.Button fluid
-                                color="green" 
-                                size="large" 
-                                type="submit"
-                                onClick={joinRoomNavigate}
-                                >
-                                <Icon name='group'/> Rejoindre
-                                </Form.Button>
-                                <Form.Button inverted fluid
-                                color="green" 
-                                size="large" 
-                                type="submit"
-                                onClick={createRoomNavigate}
-                                >                        
-                                <Icon name='plus'/> Créer
-                                </Form.Button>
-                            </Form.Group>
-                        </Form>
-                    </Segment>
-                </Grid.Column>
-            </Grid>
-        </div>
+      <div>
+      <NavBar/>
+          <Grid color="black" textAlign="center" style={{ height: "90vh",}} verticalAlign="middle">
+              <Grid.Column style={{maxWidth: "30em" }}>
+                  <Header as="h1" textAlign="center">
+                      Joindre une partie
+                  </Header>
+                  <Segment stacked>
+                      <Form size="large">
+                          <Form.Input
+                          name="Code de la partie"
+                          placeholder="Code de la partie"
+                          autoComplete="off"
+                          id="roomCodeInput"                             />
+                          <Form.Group widths="equal">
+                              <Form.Button fluid
+                              color="green" 
+                              size="large" 
+                              type="submit"
+                              onClick={joinRoomNavigate}
+                              >
+                              <Icon name='group'/> Rejoindre
+                              </Form.Button>
+                              <Form.Button inverted fluid
+                              color="green" 
+                              size="large" 
+                              type="submit"
+                              onClick={createRoomNavigate}
+                              >                        
+                              <Icon name='plus'/> Créer
+                              </Form.Button>
+                          </Form.Group>
+                      </Form>
+                  </Segment>
+              </Grid.Column>
+          </Grid>
+      </div>
     );
 }
