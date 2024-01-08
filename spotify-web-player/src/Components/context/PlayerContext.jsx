@@ -52,6 +52,8 @@ const PlayerProvider = ({ children }) => {
   }, [token]);
 
   const createRoom = () => {
+    setScore(0);
+    var score = 0;
     if (username !== "") {
       socket.emit("create_room", {
         username,
@@ -68,6 +70,9 @@ const PlayerProvider = ({ children }) => {
 
   const joinRoom = () => {
     const room = document.getElementById("roomCodeInput").value;
+    setScore(0);
+    var score = 0;
+    console.log("score actuel :", score);
     if (room !== "" && username !== "") {
       socket.x("join_room", {
         username,
