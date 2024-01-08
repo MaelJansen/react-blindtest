@@ -1,9 +1,9 @@
-function joinExistingRoom(socket, room, username, profile_picture, spotify_user_id, allUsers, CHAT_BOT) {
+function joinExistingRoom(socket, room, username, profile_picture, spotify_user_id, score, allUsers, CHAT_BOT) {
     socket.join(room);
     console.log(`${username} joined room ${room}`);
     // Save the new user to the room
     chatRoom = room;
-    allUsers.push({ id: socket.id, username, room, profile_picture, spotify_user_id });
+    allUsers.push({ id: socket.id, username, room, profile_picture, spotify_user_id, score });
 
     // Send all users in the room to the client
     chatRoomUsers = allUsers.filter((user) => user.room === room);
