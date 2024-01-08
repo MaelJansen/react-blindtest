@@ -11,14 +11,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { SocketContext } from "./context/SocketContext";
 import MyPlaylists from "./MyPlaylists";
 import { TrackProvider } from "./SpotifyContext";
+import { PlayerContext } from "./context/PlayerContext";
 
 export default function GamePage() {
-  const username = localStorage.getItem("username");
-  const room = localStorage.getItem("room");
-  const profile_picture = localStorage.getItem("profile_picture");
+  const { username, room, profile_picture, playerList, updatePlayerList } = React.useContext(PlayerContext);
 
+  const playlistId = useParams();
   const socket = React.useContext(SocketContext);
-  const [players, setPlayers] = React.useState([]);
   const navigate = useNavigate();
   const [select, setSelect] = useState(false);
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
@@ -27,7 +26,7 @@ export default function GamePage() {
   useEffect(() => {
     socket.on("chatroom_users", (data) => {
       console.log(data);
-      setPlayers(data);
+      updatePlayerList(data);
     });
     socket.on("game_started", () => {
       // Redirect to the game page when the game starts
@@ -41,12 +40,6 @@ export default function GamePage() {
     }
   }, [socket, navigate, room]);
 
-  const leaveRoom = () => {
-    const __createdtime__ = Date.now();
-    socket.emit("leave_room", { username, room, __createdtime__ });
-    // Redirect to home page
-    navigate("/", { replace: true });
-  };
 
   const startGame = () => {
     if (selectedPlaylistId) {
@@ -59,13 +52,14 @@ export default function GamePage() {
     }
   };
 
-  const listPlayers = players.map((player, index) => (
+  const listPlayerslocal = playerList.map((player, index) => (
     <Player
       key={index}
       name={player.username}
       profile_picture={player.profile_picture}
     />
   ));
+
   return (
     <div>
       <NavBar></NavBar>
@@ -105,8 +99,7 @@ export default function GamePage() {
                   height: "40vh",
                 }}
               >
-                {listPlayers}
-                <Button onClick={leaveRoom}>Quitter</Button>
+                {listPlayerslocal}
               </Segment>
               <Segment>
                 <Tchat></Tchat>

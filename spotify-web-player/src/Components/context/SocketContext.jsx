@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
-import { useNavigate } from 'react-router-dom';
 import {io} from "socket.io-client";
 
 
@@ -19,7 +18,7 @@ const SocketProvider = ({ children }) => {
             newSocket.close();
         }
     }, []);
-    
+
     return (
         <SocketContext.Provider value={socket}>
             {children}
