@@ -14,14 +14,14 @@ import { TrackProvider } from "./SpotifyContext";
 import { PlayerContext } from "./context/PlayerContext";
 
 export default function GamePage() {
-  const { username, room, profile_picture, playerList, updatePlayerList } = React.useContext(PlayerContext);
+  const { username, room, profile_picture, playerList, updatePlayerList } =
+    React.useContext(PlayerContext);
 
   const playlistId = useParams();
   const socket = React.useContext(SocketContext);
   const navigate = useNavigate();
   const [select, setSelect] = useState(false);
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
-
 
   useEffect(() => {
     socket.on("chatroom_users", (data) => {
@@ -33,13 +33,11 @@ export default function GamePage() {
       setSelect(true);
     });
 
-
     return () => {
       socket.off("chatroom_users");
       socket.off("game_started");
-    }
+    };
   }, [socket, navigate, room]);
-
 
   const startGame = () => {
     if (selectedPlaylistId) {
@@ -66,36 +64,36 @@ export default function GamePage() {
 
       <TrackProvider>
         <Grid columns={2}>
-          <Grid.Row divided >
-            {!select ? (
-              <Grid.Column width={11}
-              style={{paddingLeft: "2em"}}>
-                <Segment
-                  style={{
-                    overflowY: "scroll",
-                    height: "80vh",
-                  }}
-                >
-                  <MyPlaylists onSelectPlaylist={(id) => setSelectedPlaylistId(id)} />
-                </Segment>
-                <Button onClick={startGame}>Valider</Button>
-              </Grid.Column>
-            ) : (
-              <Grid.Column width={11}
-              style={{paddingLeft: "2em"}}>
-                <Segment>
-                  <Game playlistId={selectedPlaylistId}></Game>
-                </Segment>
-                <Segment>
-                  <ResponseEntry
-                    playlistId={selectedPlaylistId}
-                  ></ResponseEntry>
-                </Segment>
-              </Grid.Column>
-            )}
-
-            <Grid.Column width={5}
-            style={{paddingRight: "2em"}}>
+          <Grid.Row divided>
+            <Grid.Column width={11} style={{ paddingLeft: "2em" }}>
+              {!select ? (
+                <div>
+                  <Segment
+                    style={{
+                      overflowY: "scroll",
+                      height: "80vh",
+                    }}
+                  >
+                    <MyPlaylists
+                      onSelectPlaylist={(id) => setSelectedPlaylistId(id)}
+                    />
+                  </Segment>
+                  <Button onClick={startGame}>Valider</Button>
+                </div>
+              ) : (
+                <div>
+                  <Segment>
+                    <Game playlistId={selectedPlaylistId}></Game>
+                  </Segment>
+                  <Segment>
+                    <ResponseEntry
+                      playlistId={selectedPlaylistId}
+                    ></ResponseEntry>
+                  </Segment>
+                </div>
+              )}
+            </Grid.Column>
+            <Grid.Column width={5} style={{ paddingRight: "2em" }}>
               <Segment
                 style={{
                   overflowY: "scroll",
