@@ -52,14 +52,17 @@ export default function ResponseEntry() {
     console.log("tracks: ", allTracks);
   }, [allTracks]);
 
+  useEffect(() => {
+    setResponse(false);
+    setResponseArtist(false);
+  }, [currentTrack]);
+
   function isResponse(value) {
     var message = "à gagné 8 points";
     if (value === currentTrack.track.name) {
       setResponse(true);
       submitMessage(message);
       updateScore(score + 8);
-    } else {
-      setResponse(false);
     }
   }
 
@@ -70,8 +73,6 @@ export default function ResponseEntry() {
       submitMessage(message);
       console.log("bonne réponse");
       updateScore(score + 2);
-    } else {
-      setResponseArtist(false);
     }
   }
 
@@ -79,26 +80,29 @@ export default function ResponseEntry() {
     <div>
       {console.log("title :", titles)}
       {console.log("current track : ", currentTrack)}
-      <Dropdown
-        placeholder="Choisissez un tire"
-        fluid
-        selection
-        options={titles}
-        style={{ marginBottom: "2em" }}
-        onChange={(e, { value }) => {
-          isResponse(value);
-        }}
-      />
-      {console.log("test")}
-      <Dropdown
-        placeholder="Choisissez un artiste"
-        fluid
-        selection
-        options={artistes}
-        onChange={(e, { value }) => {
-          isResponseArtist(value);
-        }}
-      />
+      {!response ? (
+        <Dropdown
+          placeholder="Choisissez un tire"
+          fluid
+          selection
+          options={titles}
+          style={{ marginBottom: "2em" }}
+          onChange={(e, { value }) => {
+            isResponse(value);
+          }}
+        />
+      ) : null}
+      {!responseArtist ? (
+        <Dropdown
+          placeholder="Choisissez un artiste"
+          fluid
+          selection
+          options={artistes}
+          onChange={(e, { value }) => {
+            isResponseArtist(value);
+          }}
+        />
+      ) : null}
     </div>
   );
 }

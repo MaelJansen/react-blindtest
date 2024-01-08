@@ -13,8 +13,8 @@ export default function Player(props) {
     >
       <Label as="a" color={props.color} size="big" image>
         <img src={props.profile_picture} />
-        <LabelDetail>{props.name}</LabelDetail>
-        {props.score}
+        {props.name}
+        <LabelDetail>{props.score}</LabelDetail>
       </Label>
     </div>
   );
