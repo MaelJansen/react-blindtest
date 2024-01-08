@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useEffect } from "react";
 import Player from "./Player";
 import "semantic-ui-css/semantic.min.css";
@@ -7,18 +7,18 @@ import NavBar from "./NavBar";
 import Tchat from "./Tchat";
 import ResponseEntry from "./ResponseEntry";
 import Game from "./Game";
-import { useNavigate, useParams } from "react-router-dom";
+import { ScrollRestoration, useNavigate, useParams } from "react-router-dom";
 import { SocketContext } from "./context/SocketContext";
 import MyPlaylists from "./MyPlaylists";
 import { TrackProvider } from "./SpotifyContext";
 import { PlayerContext } from "./context/PlayerContext";
 
 export default function GamePage() {
-  const { username, room, profile_picture, playerList, updatePlayerList } =
+  const { room, playerList, updatePlayerList } =
     React.useContext(PlayerContext);
 
   const playlistId = useParams();
-  const socket = React.useContext(SocketContext);
+  const socket = useContext(SocketContext);
   const navigate = useNavigate();
   const [select, setSelect] = useState(false);
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
@@ -55,6 +55,7 @@ export default function GamePage() {
       key={index}
       name={player.username}
       profile_picture={player.profile_picture}
+      score={player.score}
     />
   ));
 

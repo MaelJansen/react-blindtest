@@ -12,8 +12,8 @@ export default function Player(props) {
         marginBottom: "1em"
       }}>
         <img src={props.profile_picture} />
-        <LabelDetail>{props.name}</LabelDetail>
-        {props.score}
+        {props.name}
+        <LabelDetail>{props.score}</LabelDetail>
       </Label>
   );
 }
