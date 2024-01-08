@@ -64,36 +64,37 @@ export default function GamePage() {
       <NavBar></NavBar>
 
       <TrackProvider>
-        <Grid columns={2} divided>
-          <Grid.Row>
-            {!select ? (
-              <Grid.Column width={11}>
-                <Segment
-                  style={{
-                    overflowY: "scroll",
-                    height: "80vh",
-                  }}
-                >
-                  <MyPlaylists
-                    onSelectPlaylist={(id) => setSelectedPlaylistId(id)}
-                  />
-                </Segment>
-                <Button onClick={startGame}>Valider</Button>
-              </Grid.Column>
-            ) : (
-              <Grid.Column width={11}>
-                <Segment>
-                  <Game playlistId={selectedPlaylistId}></Game>
-                </Segment>
-                <Segment>
-                  <ResponseEntry
-                    playlistId={selectedPlaylistId}
-                  ></ResponseEntry>
-                </Segment>
-              </Grid.Column>
-            )}
-
-            <Grid.Column width={5}>
+        <Grid columns={2}>
+          <Grid.Row divided>
+            <Grid.Column width={11} style={{ paddingLeft: "2em" }}>
+              {!select ? (
+                <div>
+                  <Segment
+                    style={{
+                      overflowY: "scroll",
+                      height: "80vh",
+                    }}
+                  >
+                    <MyPlaylists
+                      onSelectPlaylist={(id) => setSelectedPlaylistId(id)}
+                    />
+                  </Segment>
+                  <Button onClick={startGame}>Valider</Button>
+                </div>
+              ) : (
+                <div>
+                  <Segment>
+                    <Game playlistId={selectedPlaylistId}></Game>
+                  </Segment>
+                  <Segment>
+                    <ResponseEntry
+                      playlistId={selectedPlaylistId}
+                    ></ResponseEntry>
+                  </Segment>
+                </div>
+              )}
+            </Grid.Column>
+            <Grid.Column width={5} style={{ paddingRight: "2em" }}>
               <Segment
                 style={{
                   overflowY: "scroll",

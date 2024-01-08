@@ -23,7 +23,7 @@ export default function MainPage() {
           <Grid color="black" textAlign="center" style={{ height: "90vh",}} verticalAlign="middle">
               <Grid.Column style={{maxWidth: "30em" }}>
                   <Header as="h1" textAlign="center">
-                      Joindre une partie
+                      Rejoindre une partie
                   </Header>
                   <Segment stacked>
                       <Form size="large">
@@ -32,7 +32,7 @@ export default function MainPage() {
                           placeholder="Code de la partie"
                           autoComplete="off"
                           id="roomCodeInput" />
-                          <Form.Group widths="equal">
+                          <Form.Group widths="equal" style={{marginBottom: 0}}>
                               <Form.Button fluid
                               color="green" 
                               size="large" 
