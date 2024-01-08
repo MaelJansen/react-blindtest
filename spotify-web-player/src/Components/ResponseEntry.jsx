@@ -85,6 +85,7 @@ export default function ResponseEntry() {
           placeholder="Choisissez un tire"
           fluid
           selection
+          search
           options={titles}
           style={{ marginBottom: "2em" }}
           onChange={(e, { value }) => {
@@ -97,6 +98,7 @@ export default function ResponseEntry() {
           placeholder="Choisissez un artiste"
           fluid
           selection
+          search
           options={artistes}
           onChange={(e, { value }) => {
             isResponseArtist(value);
