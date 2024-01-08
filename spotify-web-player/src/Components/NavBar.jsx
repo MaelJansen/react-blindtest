@@ -25,7 +25,7 @@ export default function NavBar() {
 
   return (
     
-    <Menu inverted>
+    <Menu inverted style={{borderRadius: 0}}>
       <Menu.Item>
         <Header as="h1" style={{color:"white"}} >Cyclops</Header>
       </Menu.Item>

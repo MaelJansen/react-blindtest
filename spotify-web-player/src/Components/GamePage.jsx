@@ -65,10 +65,11 @@ export default function GamePage() {
       <NavBar></NavBar>
 
       <TrackProvider>
-        <Grid columns={2} divided>
-          <Grid.Row>
+        <Grid columns={2}>
+          <Grid.Row divided >
             {!select ? (
-              <Grid.Column width={11}>
+              <Grid.Column width={11}
+              style={{paddingLeft: "2em"}}>
                 <Segment
                   style={{
                     overflowY: "scroll",
@@ -80,7 +81,8 @@ export default function GamePage() {
                 <Button onClick={startGame}>Valider</Button>
               </Grid.Column>
             ) : (
-              <Grid.Column width={11}>
+              <Grid.Column width={11}
+              style={{paddingLeft: "2em"}}>
                 <Segment>
                   <Game playlistId={selectedPlaylistId}></Game>
                 </Segment>
@@ -92,7 +94,8 @@ export default function GamePage() {
               </Grid.Column>
             )}
 
-            <Grid.Column width={5}>
+            <Grid.Column width={5}
+            style={{paddingRight: "2em"}}>
               <Segment
                 style={{
                   overflowY: "scroll",
