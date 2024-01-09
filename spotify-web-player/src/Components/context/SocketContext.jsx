@@ -8,7 +8,7 @@ const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
     
     useEffect(() => {
-        const newSocket = io.connect("http://192.168.138.93:5000");
+        const newSocket = io.connect("http://localhost:5000");
         setSocket(newSocket);
         console.log("newSocket", newSocket);
 
