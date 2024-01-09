@@ -4,7 +4,21 @@ import { useParams } from "react-router-dom";
 import TrackPlayer from "./TrackPlayer";
 import { TrackContext } from "./SpotifyContext";
 import { PlayerContext } from "./context/PlayerContext";
-import { Progress } from "semantic-ui-react";
+import ResponseEntry from "./ResponseEntry";
+import {
+  Progress,
+  Image,
+  Grid,
+  GridColumn,
+  Divider,
+  Button,
+  Icon,
+  Segment,
+  PlaceholderLine,
+  PlaceholderImage,
+  PlaceholderHeader,
+  Placeholder,
+} from "semantic-ui-react";
 import { SocketContext } from "./context/SocketContext";
 
 function shuffle(array) {
@@ -37,13 +51,9 @@ function Quizz(props) {
   const { currentTrack, updateCurrentTrack } = useContext(TrackContext);
   const { playlistCrafted } = useContext(PlayerContext);
   const { room } = useContext(PlayerContext);
-  const [percent, setPercent] = useState(0);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setPercent(percent + 0.1);
-    }, 29);
-  }, [percent]);
+  const [percent, setPercentage] = useState(1);
+  const [foundTitle, setFoundTitle] = useState(false);
+  const [foundArtist, setFoundArtist] = useState(false);
 
   useEffect(() => {
     async function getPlaylistTracks() {
@@ -78,7 +88,6 @@ function Quizz(props) {
         const first20Tracks = tracksData.slice(0, 20);
         setTracks(tracksData);
         playlistCrafted(first20Tracks);
-
       } catch (error) {
         console.error("Error retrieving playlist tracks:", error);
       }
@@ -91,13 +100,11 @@ function Quizz(props) {
     socket.on("playlist_loaded", (data) => {
       console.log("playlist_loaded", data.playlist);
       updateAllTracks(data.playlist);
-      
     });
 
     socket.on("play_track", (data) => {
       console.log("play_track", data);
       updateCurrentTrack(data.track);
-      setPercent(0);
     });
   }, [socket]);
 
@@ -105,26 +112,72 @@ function Quizz(props) {
     socket.emit("next_track", { room: room });
   };
 
-
   return (
     <div>
-      <h1>Quizz</h1>
-      { currentTrack && (
-        <div key={currentTrack.track.id}>
-          <h3>{currentTrack.track.name}</h3>
-          <img
-            src={currentTrack.track.album.images[0].url}
-            alt={currentTrack.track.name}
-          />
-          <p>{currentTrack.track.artists[0].name}</p>
-          <TrackPlayer
-            trackId={currentTrack.track.id}
-            token={token}
-            onEnded={handleNextTrack}
-          />
-          <button onClick={handleNextTrack}>Next Track</button>
-          
-        <Progress percent={percent} size="small" indicating />
+      {currentTrack && (
+        <div>
+          <Grid
+            key={currentTrack.track.id}
+            columns={2}
+            stackable
+            centered
+            verticalAlign="middle"
+          >
+            <GridColumn width={6}>
+              {foundTitle ? (
+                <h1>{currentTrack.track.name}</h1>
+              ) : (
+                <h1>
+                  <Segment inverted size="big"></Segment>
+                </h1>
+              )}
+              <Progress
+                percent={percent}
+                size="small"
+                indicating
+                attached="top"
+              />
+              <Divider style={{ margin: 0, borderBottom: 0 }} />
+              <Progress
+                percent={percent}
+                size="small"
+                indicating
+                attached="bottom"
+              />
+
+              {foundArtist ? (
+                <h2>{currentTrack.track.artists[0].name}</h2>
+              ) : (
+                <h2>
+                  <Segment inverted size="small"></Segment>
+                </h2>
+              )}
+              <TrackPlayer
+                trackId={currentTrack.track.id}
+                token={token}
+                onEnded={handleNextTrack}
+              />
+              <Button icon="forward" onClick={handleNextTrack}></Button>
+            </GridColumn>
+            <GridColumn width={8}>
+              {foundArtist && foundTitle ? (
+                <Image
+                  src={currentTrack.track.album.images[0].url}
+                  size="large"
+                />
+              ) : (
+                <Placeholder inverted>
+                  <PlaceholderImage square />
+                </Placeholder>
+              )}
+            </GridColumn>
+          </Grid>
+
+          <ResponseEntry
+            playlistId={props.selectedPlaylistId}
+            setFoundTitle={setFoundTitle}
+            setFoundArtist={setFoundArtist}
+          ></ResponseEntry>
         </div>
       )}
     </div>

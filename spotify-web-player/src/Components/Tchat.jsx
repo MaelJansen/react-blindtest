@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from "react";
 import "semantic-ui-css/semantic.min.css";
 import { Form, Input, Feed } from "semantic-ui-react";
 import Message from "./Message";
@@ -13,20 +13,20 @@ export default function Tchat() {
     console.log("socket is null");
   }
   const [messagesReceived, setMessagesReceived] = useState([]);
-  
+
   const submitMessage = () => {
-    const message = document.getElementById('message').value;
-    if (message.trim() === '') {
+    const message = document.getElementById("message").value;
+    if (message.trim() === "") {
       return; // Do not send empty message
     }
-    
-    document.getElementById('message').value = '';
+
+    document.getElementById("message").value = "";
     const __createdtime__ = Date.now();
-    socket.emit('send_message', { message, username, room, __createdtime__ });
+    socket.emit("send_message", { message, username, room, __createdtime__ });
   };
 
   useEffect(() => {
-    socket.on('receive_message', (data) => {
+    socket.on("receive_message", (data) => {
       console.log(data);
       setMessagesReceived((state) => [
         ...state,
@@ -36,10 +36,10 @@ export default function Tchat() {
           __createdtime__: data.__createdtime__,
         },
       ]);
-      const chatContainer = document.getElementById('chatContainer');
+      const chatContainer = document.getElementById("chatContainer");
       chatContainer.scrollTop = chatContainer.scrollHeight;
     });
-    return () => socket.off('receive_message');
+    return () => socket.off("receive_message");
   }, [socket]);
 
   return (
@@ -54,15 +54,21 @@ export default function Tchat() {
           />
         ))}
       </Feed>
-      <Form.Field 
-      style={{ paddingTop: "1em" }} 
-      autoComplete="off" 
-      onKeyPress={(e) => {
-          if (e.key === 'Enter') {
+      <Form.Field
+        style={{ paddingTop: "1em" }}
+        autoComplete="off"
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
             submitMessage();
           }
-        }}>
-        <Input id="message" fluid placeholder="Dites quelque chose" icon="paper plane"/>
+        }}
+      >
+        <Input
+          id="message"
+          fluid
+          placeholder="Dites quelque chose"
+          icon="paper plane"
+        />
       </Form.Field>
     </div>
   );
