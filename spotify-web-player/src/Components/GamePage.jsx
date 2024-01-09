@@ -99,6 +99,24 @@ export default function GamePage() {
                 <div>
                   <Segment>
                     <Result></Result>
+                    <Segment.Group horizontal>
+                      <Button
+                        color="green"
+                        fluid
+                        size="massive"
+                        onClick={() => setSelect(false) && (winner = false)}
+                      >
+                        Rejouer
+                      </Button>
+                      <Button
+                        color="red"
+                        fluid
+                        size="massive"
+                        onClick={() => (window.location.href = "/")}
+                      >
+                        Retour à l'accueil
+                      </Button>
+                    </Segment.Group>
                   </Segment>
                 </div>
               )}
