@@ -77,7 +77,6 @@ function Quizz(props) {
         tracksData = shuffle(tracksData);
         const first20Tracks = tracksData.slice(0, 20);
         setTracks(tracksData);
-        updateAllTracks(tracksData);
         playlistCrafted(first20Tracks);
 
       } catch (error) {
@@ -90,7 +89,9 @@ function Quizz(props) {
 
   useEffect(() => {
     socket.on("playlist_loaded", (data) => {
-      console.log("playlist_loaded", data);
+      console.log("playlist_loaded", data.playlist);
+      updateAllTracks(data.playlist);
+      
     });
 
     socket.on("play_track", (data) => {
