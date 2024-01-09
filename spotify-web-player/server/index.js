@@ -20,7 +20,7 @@ dotenv.config();
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
-var spotify_redirect_uri = 'http://192.168.138.93:3000/auth/callback';
+var spotify_redirect_uri = 'http://localhost:3000/auth/callback';
 
 var generateRandomString = function (length) {
   var text = '';
@@ -37,10 +37,10 @@ app.use(cors());
 
 const server = http.createServer(app);
 
-// Create an io server and allow for CORS from http://192.168.138.93:port with GET and POST methods
+// Create an io server and allow for CORS from http://localhost:port with GET and POST methods
 const io = new Server(server, {
   cors: {
-    origin: 'http://192.168.138.93:3000',
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST'],
   },
 });
@@ -207,5 +207,5 @@ app.get('/auth/logout', (_, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`Listening at http://192.168.138.93:${port}`);
+  console.log(`Listening at http://localhost:${port}`);
 });
