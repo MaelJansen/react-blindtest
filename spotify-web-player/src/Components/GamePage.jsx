@@ -14,7 +14,7 @@ import { PlayerContext } from "./context/PlayerContext";
 import Result from "./Result";
 
 export default function GamePage() {
-  const { room, playerList, updatePlayerList } =
+  const { room, playerList, updatePlayerList, updateScore } =
     React.useContext(PlayerContext);
 
   const playlistId = useParams();
@@ -92,7 +92,11 @@ export default function GamePage() {
                     color="green"
                     fluid
                     size="massive"
-                    onClick={() => setSelect(false) && (winner = false)}
+                    onClick={() => (
+                      setSelect(false),
+                      setSelectedPlaylistId(null),
+                      updateScore(0)
+                    )}
                   >
                     Rejouer
                   </Button>
