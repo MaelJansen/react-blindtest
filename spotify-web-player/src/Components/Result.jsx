@@ -9,7 +9,7 @@ export default function Result() {
   const images = ["premier.png", "deuxieme.png", "troisieme.png"];
   const { playerList } = React.useContext(PlayerContext);
   playerList.sort(function (a, b) {
-    return b[2] - a[2];
+    return b.score - a.score;
   });
   const listPlayers = playerList.map((player, index) => (
     <Player
