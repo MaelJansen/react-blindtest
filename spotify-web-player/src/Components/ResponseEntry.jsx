@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import "semantic-ui-css/semantic.min.css";
-import { Dropdown } from "semantic-ui-react";
+import { Dropdown, Feed, Progress, Segment } from "semantic-ui-react";
 import axios, { all } from "axios";
 import { TrackContext } from "./SpotifyContext";
 import { SocketContext } from "./context/SocketContext";
@@ -119,29 +119,35 @@ export default function ResponseEntry() {
       {console.log("title :", titles)}
       {console.log("current track : ", currentTrack)}
       {!response ? (
-        <Dropdown
-          placeholder="Choisissez un titre"
-          fluid
-          selection
-          search
-          options={titles}
-          style={{ marginBottom: "2em" }}
-          onChange={(e, { value }) => {
-            isResponse(value);
-          }}
-        />
+        <div>
+          <Progress percent={50} attached="top" />
+          <Dropdown
+            placeholder="Choisissez un titre"
+            fluid
+            selection
+            search
+            options={titles}
+            style={{ marginBottom: "1em" }}
+            onChange={(e, { value }) => {
+              isResponse(value);
+            }}
+          />
+        </div>
       ) : null}
       {!responseArtist ? (
-        <Dropdown
-          placeholder="Choisissez un artiste"
-          fluid
-          selection
-          search
-          options={artistes}
-          onChange={(e, { value }) => {
-            isResponseArtist(value);
-          }}
-        />
+        <div>
+          <Progress percent={50} attached="top" />
+          <Dropdown
+            placeholder="Choisissez un artiste"
+            fluid
+            selection
+            search
+            options={artistes}
+            onChange={(e, { value }) => {
+              isResponseArtist(value);
+            }}
+          />
+        </div>
       ) : null}
     </div>
   );
