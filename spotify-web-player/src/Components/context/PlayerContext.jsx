@@ -115,7 +115,7 @@ const PlayerProvider = ({ children }) => {
         updatePlayerList,
         setToken,
         leaveRoom,
-            playlistCrafted,
+        playlistCrafted,
         updateScore,
       }}
     >

@@ -96,7 +96,7 @@ export default function ResponseEntry() {
   }, [currentTrack]);
 
   function isResponse(value) {
-    var message = "à gagné 8 points";
+    var message = "a gagné 8 points";
     if (value === currentTrack.track.name) {
       setResponse(true);
       submitMessage(message);
@@ -105,7 +105,7 @@ export default function ResponseEntry() {
   }
 
   function isResponseArtist(value) {
-    var message = "à gagné 2 points";
+    var message = "a gagné 2 points";
     if (value === currentTrack.track.artists[0].name) {
       setResponseArtist(true);
       submitMessage(message);
@@ -120,7 +120,7 @@ export default function ResponseEntry() {
       {console.log("current track : ", currentTrack)}
       {!response ? (
         <Dropdown
-          placeholder="Choisissez un tire"
+          placeholder="Choisissez un titre"
           fluid
           selection
           search
