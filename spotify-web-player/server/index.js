@@ -4,8 +4,14 @@ const dotenv = require('dotenv');
 const http = require('http');
 const cors = require('cors');
 const { Server } = require('socket.io');
+const session = require('express-session');
 const leaveRoom = require('./utils/leave-room');
 const joinExistingRoom = require('./utils/join_existing_room');
+const crypto = require('crypto');
+
+const generateSecretKey = () => {
+  return crypto.randomBytes(32).toString('hex');
+};
 
 const port = 5000;
 const CHAT_BOT = 'ChatBot';
@@ -34,6 +40,9 @@ var generateRandomString = function (length) {
 
 var app = express();
 app.use(cors());
+app.use(session({ secret: generateSecretKey(), resave: true, saveUninitialized: true })); // Configure express-session
+
+
 
 const server = http.createServer(app);
 
@@ -191,15 +200,21 @@ app.get('/auth/callback', (req, res) => {
 
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      access_token = body.access_token;
+      const userToken = body.access_token;
+
+      // Save the access token in the user's session
+      req.session.access_token = userToken;
+
       res.redirect('/');
     }
   });
 });
 
-app.get('/auth/token', (_, res) => {
-  res.json({ access_token: access_token });
+app.get('/auth/token', (req, res) => {
+  const userToken = req.session.access_token || '';
+  res.json({ access_token: userToken });
 });
+
 
 app.get('/auth/logout', (_, res) => {
   access_token = '';

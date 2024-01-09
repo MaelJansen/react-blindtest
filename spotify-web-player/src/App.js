@@ -7,15 +7,13 @@ import { PlayerContext } from './Components/context/PlayerContext';
 
 
 function App() {
-  const { token,setToken } = React.useContext(PlayerContext);
-
   useEffect(() => {
 
     async function getToken() {
-      const response = await fetch('/auth/token');
-      const json = await response.json();
-      setToken(json.access_token);
-      localStorage.setItem('token', json.access_token);
+        const response = await fetch('/auth/token');
+        const json = await response.json();
+        localStorage.setItem('token', json.access_token);
+      
     }
 
     getToken();
@@ -24,7 +22,7 @@ function App() {
 
   return (
     <>
-        { (token === '') ? <Login/> :  <div><Home/><Logout/></div> }
+        { (localStorage.getItem("token") === '') ? <Login/> :  <div><Home/><Logout/></div> }
     </>
   );
 }

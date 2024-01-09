@@ -12,6 +12,7 @@ import { SocketContext } from "./context/SocketContext";
 import MyPlaylists from "./MyPlaylists";
 import { TrackProvider } from "./SpotifyContext";
 import { PlayerContext } from "./context/PlayerContext";
+import Result from "./Result";
 
 export default function GamePage() {
   const { room, playerList, updatePlayerList } =
@@ -39,7 +40,6 @@ export default function GamePage() {
     };
   }, [socket, navigate, room]);
 
-
   const loadsGame = () => {
     if (selectedPlaylistId) {
       console.log("selectedPlaylistId", selectedPlaylistId);
@@ -59,6 +59,8 @@ export default function GamePage() {
       score={player.score}
     />
   ));
+
+  const winner = playerList.find((player) => player.score >= 30);
 
   return (
     <div>
@@ -82,7 +84,7 @@ export default function GamePage() {
                   </Segment>
                   <Button onClick={loadsGame}>Valider</Button>
                 </div>
-              ) : (
+              ) : !winner ? (
                 <div>
                   <Segment>
                     <Quizz playlistId={selectedPlaylistId}></Quizz>
@@ -91,6 +93,12 @@ export default function GamePage() {
                     <ResponseEntry
                       playlistId={selectedPlaylistId}
                     ></ResponseEntry>
+                  </Segment>
+                </div>
+              ) : (
+                <div>
+                  <Segment>
+                    <Result></Result>
                   </Segment>
                 </div>
               )}
