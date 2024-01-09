@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useEffect } from "react";
 import Player from "./Player";
 import "semantic-ui-css/semantic.min.css";
@@ -7,21 +7,21 @@ import NavBar from "./NavBar";
 import Tchat from "./Tchat";
 import ResponseEntry from "./ResponseEntry";
 import Quizz from "./Quizz";
-import { useNavigate, useParams } from "react-router-dom";
+import { ScrollRestoration, useNavigate, useParams } from "react-router-dom";
 import { SocketContext } from "./context/SocketContext";
 import MyPlaylists from "./MyPlaylists";
 import { TrackProvider } from "./SpotifyContext";
 import { PlayerContext } from "./context/PlayerContext";
 
 export default function GamePage() {
-  const { username, room, profile_picture, playerList, updatePlayerList } = React.useContext(PlayerContext);
+  const { room, playerList, updatePlayerList } =
+    React.useContext(PlayerContext);
 
   const playlistId = useParams();
-  const socket = React.useContext(SocketContext);
+  const socket = useContext(SocketContext);
   const navigate = useNavigate();
   const [select, setSelect] = useState(false);
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
-
 
   useEffect(() => {
     socket.on("chatroom_users", (data) => {
@@ -33,11 +33,10 @@ export default function GamePage() {
       setSelect(true);
     });
 
-
     return () => {
       socket.off("chatroom_users");
       socket.off("game_loaded");
-    }
+    };
   }, [socket, navigate, room]);
 
 
@@ -57,6 +56,7 @@ export default function GamePage() {
       key={index}
       name={player.username}
       profile_picture={player.profile_picture}
+      score={player.score}
     />
   ));
 
@@ -65,34 +65,37 @@ export default function GamePage() {
       <NavBar></NavBar>
 
       <TrackProvider>
-        <Grid columns={2} divided>
-          <Grid.Row>
-            {!select ? (
-              <Grid.Column width={11}>
-                <Segment
-                  style={{
-                    overflowY: "scroll",
-                    height: "80vh",
-                  }}
-                >
-                  <MyPlaylists onSelectPlaylist={(id) => setSelectedPlaylistId(id)} />
-                </Segment>
-                <Button onClick={loadsGame}>Valider</Button>
-              </Grid.Column>
-            ) : (
-              <Grid.Column width={11}>
-                <Segment>
-                  <Quizz playlistId={selectedPlaylistId}></Quizz>
-                </Segment>
-                <Segment>
-                  <ResponseEntry
-                    playlistId={selectedPlaylistId}
-                  ></ResponseEntry>
-                </Segment>
-              </Grid.Column>
-            )}
-
-            <Grid.Column width={5}>
+        <Grid columns={2}>
+          <Grid.Row divided>
+            <Grid.Column width={11} style={{ paddingLeft: "2em" }}>
+              {!select ? (
+                <div>
+                  <Segment
+                    style={{
+                      overflowY: "scroll",
+                      height: "80vh",
+                    }}
+                  >
+                    <MyPlaylists
+                      onSelectPlaylist={(id) => setSelectedPlaylistId(id)}
+                    />
+                  </Segment>
+                  <Button onClick={loadsGame}>Valider</Button>
+                </div>
+              ) : (
+                <div>
+                  <Segment>
+                    <Quizz playlistId={selectedPlaylistId}></Quizz>
+                  </Segment>
+                  <Segment>
+                    <ResponseEntry
+                      playlistId={selectedPlaylistId}
+                    ></ResponseEntry>
+                  </Segment>
+                </div>
+              )}
+            </Grid.Column>
+            <Grid.Column width={5} style={{ paddingRight: "2em" }}>
               <Segment
                 style={{
                   overflowY: "scroll",

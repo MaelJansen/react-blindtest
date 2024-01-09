@@ -50,16 +50,32 @@ io.on('connection', (socket) => {
   console.log(`User connected ${socket.id}`);
 
   socket.on('create_room', (data) => {
-    const { username, profile_picture, spotify_user_id } = data;
+    const { username, profile_picture, spotify_user_id, score } = data;
     const room = generateRandomString(6);
     // You may emit an event here to send the room code back to the client, if needed
     socket.emit('room_created', room);
-    joinExistingRoom(socket, room, username, profile_picture, spotify_user_id, allUsers, CHAT_BOT);
+    joinExistingRoom(socket, room, username, profile_picture, spotify_user_id, score, allUsers, CHAT_BOT);
+  });
+
+  socket.on('update_score', (data) => {
+    console.log("test de update score")
+    const {username, room, spotify_user_id, newScore} = data;
+    const existingUser = allUsers.find(user => user.spotify_user_id === spotify_user_id && user.room === room);
+
+    if (existingUser) {
+      existingUser.score = newScore;
+      console.log("updateScore");
+      
+      chatRoomUsers = allUsers.filter((user) => user.room === room);
+      socket.to(room).emit('chatroom_users', chatRoomUsers);
+      socket.emit('chatroom_users', chatRoomUsers);
+      return;
+    }
   });
 
   // We can write our socket event listeners in here...
   socket.on('join_room', (data) => {
-    const { username, room, profile_picture, spotify_user_id } = data;
+    const { username, room, profile_picture, spotify_user_id, score } = data;
 
     // Check if the room exists before allowing a user to join
     console.log(username);
@@ -87,7 +103,7 @@ io.on('connection', (socket) => {
     // Send the codeof the room to the client
     socket.emit('room_code', room);
 
-    joinExistingRoom(socket, room, username, profile_picture, spotify_user_id, allUsers, CHAT_BOT);
+    joinExistingRoom(socket, room, username, profile_picture, spotify_user_id, score, allUsers, CHAT_BOT);
 
     
   });

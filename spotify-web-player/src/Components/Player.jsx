@@ -5,17 +5,15 @@ import { Icon, Label, LabelDetail } from "semantic-ui-react";
 export default function Player(props) {
   console.log("props", props);
   return (
-    <div
+      <Label inverted as="a" color={props.color} size="big" image
       style={{
         textOverflow: "ellipsis",
         maxWidth: "30vw",
-      }}
-    >
-      <Label as="a" color={props.color} size="big" image>
+        marginBottom: "1em"
+      }}>
         <img src={props.profile_picture} />
-        <LabelDetail>{props.name}</LabelDetail>
-        {props.score}
+        {props.name}
+        <LabelDetail>{props.score}</LabelDetail>
       </Label>
-    </div>
   );
 }
