@@ -58,7 +58,11 @@ function MyPlaylists({ onSelectPlaylist }) {
                     onClick={() => changeColor(playlist.id)}
                     id={playlist.id}
                   >
-                    <h3>{playlist.name.slice(0, 20)}</h3>
+                    <h3>
+                      {playlist.name.length > 20
+                        ? playlist.name.slice(0, 20) + "..."
+                        : playlist.name}
+                    </h3>
                     <Image
                       src={playlist.images[0].url}
                       alt={playlist.name}
@@ -84,7 +88,11 @@ function MyPlaylists({ onSelectPlaylist }) {
                     onClick={() => changeColor(playlist.id)}
                     id={playlist.id}
                   >
-                    <h3>{playlist.name.slice(0, 20)}</h3>
+                    <h3>
+                      {playlist.name.length > 20
+                        ? playlist.name.slice(0, 20) + "..."
+                        : playlist.name}
+                    </h3>
                     <Image
                       src={playlist.images[0].url}
                       alt={playlist.name}
