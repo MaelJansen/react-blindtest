@@ -60,7 +60,7 @@ export default function GamePage() {
     />
   ));
 
-  const winner = playerList.find((player) => player.score >= 10);
+  const winner = playerList.find((player) => player.score >= 30);
 
   return (
     <div>

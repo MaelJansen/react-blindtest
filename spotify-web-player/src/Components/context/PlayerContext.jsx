@@ -10,8 +10,8 @@ const PlayerProvider = ({ children }) => {
   const [profile_picture, setProfilePicture] = useState("");
   const [spotify_user_id, setSpotifyUserId] = useState("");
   const [playerList, setPlayerList] = useState([]);
-  const [token, setToken] = useState("");
   const [score, setScore] = useState(0);
+  
 
   const updatePlayerList = (newPlayerList) => {
     setPlayerList(newPlayerList);
@@ -34,7 +34,7 @@ const PlayerProvider = ({ children }) => {
       try {
         const response = await fetch("https://api.spotify.com/v1/me", {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
         const data = await response.json();
@@ -49,7 +49,7 @@ const PlayerProvider = ({ children }) => {
     };
 
     getSpotifyUserInfo();
-  }, [token]);
+  }, [localStorage.getItem("token")]);
 
   const createRoom = () => {
     setScore(0);
@@ -108,12 +108,10 @@ const PlayerProvider = ({ children }) => {
         profile_picture,
         spotify_user_id,
         playerList,
-        token,
         score,
         createRoom,
         joinRoom,
         updatePlayerList,
-        setToken,
         leaveRoom,
         playlistCrafted,
         updateScore,

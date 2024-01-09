@@ -6,7 +6,7 @@ import { Button, Image, Grid, Segment, Container } from "semantic-ui-react";
 
 function MyPlaylists({ onSelectPlaylist }) {
   const [playlists, setPlaylists] = useState([]);
-
+  
   const changeColor = (playlistId) => {
     // Call the onSelectPlaylist callback with the playlist ID
     onSelectPlaylist(playlistId);
@@ -34,6 +34,7 @@ function MyPlaylists({ onSelectPlaylist }) {
           }
         );
         const playlistsData = response.data.items;
+        console.log('localStorage.getItem("token")', localStorage.getItem("token"));
         setPlaylists(playlistsData);
         console.log("My playlists :", playlistsData);
       } catch (error) {
