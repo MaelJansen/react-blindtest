@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import "semantic-ui-css/semantic.min.css";
-import { Dropdown, Feed } from "semantic-ui-react";
+import { Dropdown } from "semantic-ui-react";
 import axios, { all } from "axios";
 import { TrackContext } from "./SpotifyContext";
 import { SocketContext } from "./context/SocketContext";
@@ -16,6 +16,44 @@ export default function ResponseEntry() {
   const [response, setResponse] = useState(false);
   const [responseArtist, setResponseArtist] = useState(false);
   const socket = useContext(SocketContext);
+
+  useEffect(() => {
+    const shuffledTitles = shuffleArray(
+      Object.keys(allTracks).map((track) => allTracks[track].track.name)
+    );
+    const shuffledArtistes = shuffleArray(
+      Object.keys(allTracks).map(
+        (track) => allTracks[track].track.artists[0].name
+      )
+    );
+
+    setTitles(
+      shuffledTitles.map((title) => ({
+        key: title,
+        text: title,
+        value: title,
+      }))
+    );
+
+    setArtistes(
+      shuffledArtistes.map((artist) => ({
+        key: artist,
+        text: artist,
+        value: artist,
+      }))
+    );
+
+    console.log("tracks: ", allTracks);
+  }, [allTracks]);
+
+  function shuffleArray(array) {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  }
 
   const submitMessage = (message) => {
     const __createdtime__ = Date.now();
@@ -58,7 +96,7 @@ export default function ResponseEntry() {
   }, [currentTrack]);
 
   function isResponse(value) {
-    var message = "à gagné 8 points";
+    var message = "a gagné 8 points";
     if (value === currentTrack.track.name) {
       setResponse(true);
       submitMessage(message);
@@ -67,7 +105,7 @@ export default function ResponseEntry() {
   }
 
   function isResponseArtist(value) {
-    var message = "à gagné 2 points";
+    var message = "a gagné 2 points";
     if (value === currentTrack.track.artists[0].name) {
       setResponseArtist(true);
       submitMessage(message);
@@ -82,7 +120,7 @@ export default function ResponseEntry() {
       {console.log("current track : ", currentTrack)}
       {!response ? (
         <Dropdown
-          placeholder="Choisissez un tire"
+          placeholder="Choisissez un titre"
           fluid
           selection
           search

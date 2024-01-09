@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import { Link } from "react-router-dom";
 import App from "../App";
 import Quizz from "./Quizz";
-import Game from "./Game";
 import MainPage from "./MainPage";
 import Result from "./Result";
 import Tchat from "./Tchat";

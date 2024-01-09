@@ -6,7 +6,7 @@ import { Grid, Segment, Button } from "semantic-ui-react";
 import NavBar from "./NavBar";
 import Tchat from "./Tchat";
 import ResponseEntry from "./ResponseEntry";
-import Game from "./Game";
+import Quizz from "./Quizz";
 import { ScrollRestoration, useNavigate, useParams } from "react-router-dom";
 import { SocketContext } from "./context/SocketContext";
 import MyPlaylists from "./MyPlaylists";
@@ -28,22 +28,23 @@ export default function GamePage() {
       console.log(data);
       updatePlayerList(data);
     });
-    socket.on("game_started", () => {
+    socket.on("game_loaded", () => {
       // Redirect to the game page when the game starts
       setSelect(true);
     });
 
     return () => {
       socket.off("chatroom_users");
-      socket.off("game_started");
+      socket.off("game_loaded");
     };
   }, [socket, navigate, room]);
 
-  const startGame = () => {
+
+  const loadsGame = () => {
     if (selectedPlaylistId) {
       console.log("selectedPlaylistId", selectedPlaylistId);
-      // Emit 'start_game' event to the server with the selected playlist ID
-      socket.emit("start_game", { room, playlistId: selectedPlaylistId });
+      // Emit 'loads_game' event to the server with the selected playlist ID
+      socket.emit("loads_game", { room, playlistId: selectedPlaylistId });
     } else {
       // Handle the case when no playlist is selected
       console.log("Please select a playlist before starting the game");
@@ -79,12 +80,12 @@ export default function GamePage() {
                       onSelectPlaylist={(id) => setSelectedPlaylistId(id)}
                     />
                   </Segment>
-                  <Button onClick={startGame}>Valider</Button>
+                  <Button onClick={loadsGame}>Valider</Button>
                 </div>
               ) : (
                 <div>
                   <Segment>
-                    <Game playlistId={selectedPlaylistId}></Game>
+                    <Quizz playlistId={selectedPlaylistId}></Quizz>
                   </Segment>
                   <Segment>
                     <ResponseEntry

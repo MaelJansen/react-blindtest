@@ -74,7 +74,7 @@ const PlayerProvider = ({ children }) => {
     var score = 0;
     console.log("score actuel :", score);
     if (room !== "" && username !== "") {
-      socket.x("join_room", {
+      socket.emit("join_room", {
         username,
         room,
         profile_picture,
@@ -88,11 +88,17 @@ const PlayerProvider = ({ children }) => {
     }
   };
 
-  const leaveRoom = () => {
-    const __createdtime__ = Date.now();
-    socket.emit("leave_room", { username, room, __createdtime__ });
-    setRoom(null);
-  };
+    const leaveRoom = () => {
+        const __createdtime__ = Date.now();
+        socket.emit("leave_room", { username, room, __createdtime__ });
+        setRoom(null);
+    }
+
+    const playlistCrafted = (hostPlaylist) => {
+        const __createdtime__ = Date.now();
+        socket.emit("playlist_crafted", { room, hostPlaylist, __createdtime__ });
+    }
+
 
   return (
     <PlayerContext.Provider
@@ -109,6 +115,7 @@ const PlayerProvider = ({ children }) => {
         updatePlayerList,
         setToken,
         leaveRoom,
+        playlistCrafted,
         updateScore,
       }}
     >

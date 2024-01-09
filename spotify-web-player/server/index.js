@@ -11,6 +11,7 @@ const port = 5000;
 const CHAT_BOT = 'ChatBot';
 let chatRoom = ''; // E.g. javascript, node,...
 let allUsers = []; // All users in current chat room
+let playlist = []; // Playlist of the current chat room
 
 global.access_token = '';
 
@@ -19,7 +20,7 @@ dotenv.config();
 var spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 var spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 
-var spotify_redirect_uri = 'http://localhost:3000/auth/callback';
+var spotify_redirect_uri = 'http://192.168.138.93:3000/auth/callback';
 
 var generateRandomString = function (length) {
   var text = '';
@@ -36,10 +37,10 @@ app.use(cors());
 
 const server = http.createServer(app);
 
-// Create an io server and allow for CORS from http://localhost:port with GET and POST methods
+// Create an io server and allow for CORS from http://192.168.138.93:port with GET and POST methods
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'http://192.168.138.93:3000',
     methods: ['GET', 'POST'],
   },
 });
@@ -124,11 +125,31 @@ io.on('connection', (socket) => {
   });
 
   // Listen for 'start_game' event
-  socket.on('start_game', (data) => {
+  socket.on('loads_game', (data) => {
     const { room } = data;
     // Broadcast to all clients in the room that the game has started
-    io.to(room).emit('game_started');
+    io.to(room).emit('game_loaded');
   });
+
+  socket.on('playlist_crafted', (data) => {
+    const { room, hostPlaylist, __createdtime__ } = data;
+    playlist = hostPlaylist;
+
+    // Broadcast to all clients in the room that the game has started
+    io.to(room).emit('playlist_loaded', { playlist, __createdtime__ });
+
+    // Plays the first track of the playlist
+    io.to(room).emit('play_track', { track: playlist[0], __createdtime__ });
+  
+  });
+
+  socket.on('next_track', (data) => {
+    const { room, __createdtime__ } = data;
+    // removes first element and plays the new first
+    playlist.shift();
+    io.to(room).emit('play_track', { track: playlist[0], __createdtime__ });
+  }
+  );
 
   socket.on('send_message', (data) => {
     const { message, username, room, __createdtime__} = data;
@@ -186,5 +207,5 @@ app.get('/auth/logout', (_, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}`);
+  console.log(`Listening at http://192.168.138.93:${port}`);
 });
