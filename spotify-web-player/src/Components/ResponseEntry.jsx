@@ -86,7 +86,7 @@ export default function ResponseEntry() {
     <div>
       {console.log("title :", titles)}
       <Dropdown
-        placeholder="Choisissez un tire"
+        placeholder="Choisissez un titre"
         fluid
         selection
         options={titles}

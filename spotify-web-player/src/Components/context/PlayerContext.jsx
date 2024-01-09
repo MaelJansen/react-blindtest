@@ -79,6 +79,12 @@ const PlayerProvider = ({ children }) => {
         setRoom(null);
     }
 
+    const playlistCrafted = (hostPlaylist) => {
+        const __createdtime__ = Date.now();
+        socket.emit("playlist_crafted", { room, hostPlaylist, __createdtime__ });
+    }
+
+
     return (
         <PlayerContext.Provider value={{
             room,
@@ -92,6 +98,7 @@ const PlayerProvider = ({ children }) => {
             updatePlayerList,
             setToken,
             leaveRoom,
+            playlistCrafted,
         }}>
             {children}
         </PlayerContext.Provider>
