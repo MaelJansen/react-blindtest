@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { all } from "axios";
 import Quizz from "./Quizz";
 import { Link } from "react-router-dom";
-import { Button, Image, Grid, Segment, Checkbox } from "semantic-ui-react";
+import { Button, Image, Grid, Segment, Container } from "semantic-ui-react";
 
 function MyPlaylists({ onSelectPlaylist }) {
   const [playlists, setPlaylists] = useState([]);
@@ -10,7 +10,16 @@ function MyPlaylists({ onSelectPlaylist }) {
   const changeColor = (playlistId) => {
     // Call the onSelectPlaylist callback with the playlist ID
     onSelectPlaylist(playlistId);
-    console.log("playlistId", playlistId);
+
+    const playlist = document.getElementById(playlistId);
+    playlist.className = "ui button green fluid";
+
+    const playlists = document.getElementsByClassName("ui button green fluid");
+    for (let i = 0; i < playlists.length; i++) {
+      if (playlists[i].id !== playlistId) {
+        playlists[i].className = "ui grey fluid button";
+      }
+    }
   };
 
   useEffect(() => {
@@ -26,7 +35,7 @@ function MyPlaylists({ onSelectPlaylist }) {
         );
         const playlistsData = response.data.items;
         setPlaylists(playlistsData);
-        console.log("My playlists:", playlistsData);
+        console.log("My playlists :", playlistsData);
       } catch (error) {
         console.error("Error retrieving my playlists:", error);
       }
@@ -37,7 +46,7 @@ function MyPlaylists({ onSelectPlaylist }) {
   return (
     <div>
       <h1>My Playlists</h1>
-      <Grid columns={2}>
+      <Grid columns={4}>
         <Grid.Row>
           {playlists.map((playlist) =>
             playlist.key % 2 ? (
@@ -45,21 +54,24 @@ function MyPlaylists({ onSelectPlaylist }) {
                 <Segment>
                   <Button
                     fluid
-                    color="black"
-                    basic
+                    color="grey"
                     onClick={() => changeColor(playlist.id)}
+                    id={playlist.id}
                   >
-                   
-                    </Button>
-                    <h3>{playlist.name}</h3>
+                    <h3>
+                      {playlist.name.length > 20
+                        ? playlist.name.slice(0, 20) + "..."
+                        : playlist.name}
+                    </h3>
                     <Image
                       src={playlist.images[0].url}
                       alt={playlist.name}
                       size="small"
+                      centered
                     />
                     <p>{playlist.tracks.total} tracks</p>
                     <p>{playlist.description}</p>
-                  
+                  </Button>
                 </Segment>
               </Grid.Column>
             ) : null
@@ -70,22 +82,26 @@ function MyPlaylists({ onSelectPlaylist }) {
             !playlist.key % 2 ? (
               <Grid.Column>
                 <Segment>
-                <Button
+                  <Button
                     fluid
-                    color="black"
-                    basic
+                    color="grey"
                     onClick={() => changeColor(playlist.id)}
+                    id={playlist.id}
                   >
-                    </Button>
-                    <h3>{playlist.name}</h3>
+                    <h3>
+                      {playlist.name.length > 20
+                        ? playlist.name.slice(0, 20) + "..."
+                        : playlist.name}
+                    </h3>
                     <Image
                       src={playlist.images[0].url}
                       alt={playlist.name}
                       size="small"
+                      centered
                     />
                     <p>{playlist.tracks.total} tracks</p>
                     <p>{playlist.description}</p>
-                  
+                  </Button>
                 </Segment>
               </Grid.Column>
             ) : null
