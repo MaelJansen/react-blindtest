@@ -74,7 +74,7 @@ const PlayerProvider = ({ children }) => {
     var score = 0;
     console.log("score actuel :", score);
     if (room !== "" && username !== "") {
-      socket.x("join_room", {
+      socket.emit("join_room", {
         username,
         room,
         profile_picture,
