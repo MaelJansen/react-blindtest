@@ -5,7 +5,6 @@ import "semantic-ui-css/semantic.min.css";
 import { Grid, Segment, Button } from "semantic-ui-react";
 import NavBar from "./NavBar";
 import Tchat from "./Tchat";
-import ResponseEntry from "./ResponseEntry";
 import Quizz from "./Quizz";
 import { ScrollRestoration, useNavigate, useParams } from "react-router-dom";
 import { SocketContext } from "./context/SocketContext";
@@ -70,38 +69,25 @@ export default function GamePage() {
         <Grid columns={2}>
           <Grid.Row divided>
             <Grid.Column width={11} style={{ paddingLeft: "2em" }}>
-              {!select ? (
-                <div>
-                  <Segment
-                    style={{
-                      overflowY: "scroll",
-                      height: "80vh",
-                    }}
-                  >
+              <Segment
+                style={{
+                  overflowY: "scroll",
+                  height: "90vh",
+                }}
+              >
+                {!select ? (
+                  <div>
                     <MyPlaylists
                       onSelectPlaylist={(id) => setSelectedPlaylistId(id)}
                     />
-                  </Segment>
-                  <Button onClick={loadsGame}>Valider</Button>
-                </div>
-              ) : !winner ? (
-                <div>
-                  <Segment>
-                    <Quizz playlistId={selectedPlaylistId}></Quizz>
-                  </Segment>
-                  <Segment>
-                    <ResponseEntry
-                      playlistId={selectedPlaylistId}
-                    ></ResponseEntry>
-                  </Segment>
-                </div>
-              ) : (
-                <div>
-                  <Segment>
-                    <Result></Result>
-                  </Segment>
-                </div>
-              )}
+                    <Button onClick={loadsGame}>Valider</Button>
+                  </div>
+                ) : !winner ? (
+                  <Quizz playlistId={selectedPlaylistId}></Quizz>
+                ) : (
+                  <Result></Result>
+                )}
+              </Segment>
             </Grid.Column>
             <Grid.Column width={5} style={{ paddingRight: "2em" }}>
               <Segment

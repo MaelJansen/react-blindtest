@@ -218,6 +218,8 @@ app.get('/auth/token', (req, res) => {
 
 app.get('/auth/logout', (_, res) => {
   access_token = '';
+  res.clearCookie('connect.sid');
+  userToken = '';
   res.redirect('/');
 });
 

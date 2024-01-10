@@ -69,23 +69,33 @@ const PlayerProvider = ({ children }) => {
   };
 
   const joinRoom = () => {
-    const room = document.getElementById("roomCodeInput").value;
-    setScore(0);
-    var score = 0;
-    console.log("score actuel :", score);
-    if (room !== "" && username !== "") {
-      socket.emit("join_room", {
-        username,
-        room,
-        profile_picture,
-        spotify_user_id,
-        score,
-      });
-      socket.on("room_code", (data) => {
-        console.log(`room_joined ${data}`);
-        setRoom(data);
-      });
-    }
+    return new Promise((resolve, reject) => {
+      const room = document.getElementById("roomCodeInput").value;
+      setScore(0);
+      var score = 0;
+
+      if (room !== "" && username !== "") {
+        socket.emit("join_room", {
+          username,
+          room,
+          profile_picture,
+          spotify_user_id,
+          score,
+        });
+
+        socket.on("room_code", (data) => {
+          console.log(`room_joined ${data}`);
+          setRoom(data);
+          resolve(true);
+        });
+
+        socket.on("room_not_found", (data) => {
+          console.log(`room_not_found ${data}`);
+          setRoom(null);
+          reject(false);
+        });
+      }
+    });
   };
 
     const leaveRoom = () => {

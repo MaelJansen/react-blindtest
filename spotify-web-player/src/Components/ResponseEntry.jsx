@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import "semantic-ui-css/semantic.min.css";
-import { Dropdown } from "semantic-ui-react";
+import { Dropdown, Feed, Progress, Segment } from "semantic-ui-react";
 import axios, { all } from "axios";
 import { TrackContext } from "./SpotifyContext";
 import { SocketContext } from "./context/SocketContext";
 import { PlayerContext } from "./context/PlayerContext";
 import { v4 as uuidv4 } from "uuid";
 
-export default function ResponseEntry() {
+export default function ResponseEntry(props) {
   const [titles, setTitles] = useState([]);
   const [artistes, setArtistes] = useState([]);
   const { allTracks } = useContext(TrackContext);
@@ -16,6 +16,7 @@ export default function ResponseEntry() {
   const [response, setResponse] = useState(false);
   const [responseArtist, setResponseArtist] = useState(false);
   const socket = useContext(SocketContext);
+  const [answerPercentage, setAnswerPercentage] = useState(0);
 
   useEffect(() => {
     const shuffledTitles = shuffleArray(
@@ -92,14 +93,19 @@ export default function ResponseEntry() {
 
   useEffect(() => {
     setResponse(false);
+    props.setFoundTitle(false);
     setResponseArtist(false);
+    props.setFoundArtist(false);
+    setAnswerPercentage(0);
   }, [currentTrack]);
 
   function isResponse(value) {
     var message = "a gagné 8 points";
     if (value === currentTrack.track.name) {
       setResponse(true);
+      props.setFoundTitle(true);
       submitMessage(message);
+      setAnswerPercentage(answerPercentage + 50);
       updateScore(score + 8);
     }
   }
@@ -108,41 +114,61 @@ export default function ResponseEntry() {
     var message = "a gagné 2 points";
     if (value === currentTrack.track.artists[0].name) {
       setResponseArtist(true);
+      props.setFoundArtist(true);
       submitMessage(message);
+      setAnswerPercentage(answerPercentage + 50);
       console.log("bonne réponse");
       updateScore(score + 2);
     }
   }
 
   return (
-    <div>
+    <Segment
+      textAlign="center"
+      attached="bottom"
+      style={{ margin: "2em", width: "auto" }}
+      verticalAlign="bottom"
+    >
+      <Progress percent={answerPercentage} indicating attached="top" />
       {console.log("title :", titles)}
       {console.log("current track : ", currentTrack)}
       {!response ? (
-        <Dropdown
-          placeholder="Choisissez un titre"
-          fluid
-          selection
-          search
-          options={titles}
-          style={{ marginBottom: "2em" }}
-          onChange={(e, { value }) => {
-            isResponse(value);
-          }}
-        />
+        <div>
+          <Dropdown
+            placeholder="Entrez le titre"
+            fluid
+            selection
+            search
+            options={titles}
+            style={{ marginBottom: "1em" }}
+            onChange={(e, { value }) => {
+              isResponse(value);
+            }}
+          />
+        </div>
       ) : null}
       {!responseArtist ? (
-        <Dropdown
-          placeholder="Choisissez un artiste"
-          fluid
-          selection
-          search
-          options={artistes}
-          onChange={(e, { value }) => {
-            isResponseArtist(value);
-          }}
-        />
+        <div>
+          <Dropdown
+            placeholder="Entrez l'artiste"
+            fluid
+            selection
+            search
+            options={artistes}
+            onChange={(e, { value }) => {
+              isResponseArtist(value);
+            }}
+          />
+        </div>
       ) : null}
-    </div>
+      {response && responseArtist ? (
+        <div>
+          <h1>🎉 Bravo ! 🎉</h1>
+          <h2>Vous avez trouvé le titre et l'artiste !</h2>
+        </div>
+      ) : (
+        <h1>🤔</h1>
+      )}
+    </Segment>
   );
 }
