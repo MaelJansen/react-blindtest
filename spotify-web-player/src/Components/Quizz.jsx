@@ -128,6 +128,7 @@ function Quizz(props) {
                 <h1>{currentTrack.track.name}</h1>
               ) : (
                 <h1>
+                  <Icon name="music" />
                   <Segment inverted size="big"></Segment>
                 </h1>
               )}
@@ -149,6 +150,7 @@ function Quizz(props) {
                 <h2>{currentTrack.track.artists[0].name}</h2>
               ) : (
                 <h2>
+                  <Icon name="user outline" />
                   <Segment inverted size="small"></Segment>
                 </h2>
               )}
