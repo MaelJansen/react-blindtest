@@ -72,24 +72,6 @@ export default function Result() {
           {classement()}
           {classementPerdant()}
         </Grid>
-        <Segment.Group horizontal>
-          <Button
-            color="green"
-            fluid
-            size="massive"
-            onClick={() => (window.location.href = "/")}
-          >
-            Rejouer
-          </Button>
-          <Button
-            color="red"
-            fluid
-            size="massive"
-            onClick={() => (window.location.href = "/")}
-          >
-            Retour à l'accueil
-          </Button>
-        </Segment.Group>
       </Segment>
     </div>
   );
