@@ -8,16 +8,17 @@ export default function MainPage() {
     const navigate = useNavigate();
     const { joinRoom, createRoom } = useContext(PlayerContext);
 
-    const joinRoomNavigate = () => {
-        var roomExists = false;
-        roomExists = joinRoom();
-        if (roomExists) {
-            navigate("/game", { replace: true });
+    
+
+    const joinRoomNavigate = async () => {
+        try {
+          await joinRoom();
+          navigate("/game", { replace: true });
+        } catch (error) {
+          console.log("Room does not exist");
         }
-        else {
-            console.log("Room does not exist");
-        }
-    }
+      };
+
     const createRoomNavigate = () => {
         createRoom();
         navigate("/game", { replace: true });
