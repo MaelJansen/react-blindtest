@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-function TrackPlayer({ trackId, token, onEnded }) {
+function TrackPlayer({ trackId, token, onEnded, setPercentage }) {
   const [previewUrl, setPreviewUrl] = useState("");
 
   useEffect(() => {
@@ -25,7 +25,27 @@ function TrackPlayer({ trackId, token, onEnded }) {
     }
 
     getTrackPreviewUrl();
-  }, [trackId]);
+  }, [trackId, token]);
+
+  useEffect(() => {
+    const audioElement = document.getElementById("audioElement");
+
+    if (audioElement) {
+      audioElement.addEventListener("timeupdate", handleTimeUpdate);
+    }
+
+    return () => {
+      if (audioElement) {
+        audioElement.removeEventListener("timeupdate", handleTimeUpdate);
+      }
+    };
+  }, [previewUrl]);
+
+  const handleTimeUpdate = () => {
+    const audioElement = document.getElementById("audioElement");
+    const percentage = (audioElement.currentTime / audioElement.duration) * 100;
+    setPercentage(percentage);
+  };
 
   const handleEnded = () => {
     // Callback to notify the parent component (Quizz) that the track has ended
@@ -33,8 +53,14 @@ function TrackPlayer({ trackId, token, onEnded }) {
   };
 
   return (
-    <div hidden>
-      <audio autoPlay controls src={previewUrl} onEnded={handleEnded} />
+    <div>
+      <audio
+        id="audioElement"
+        autoPlay
+        controls
+        src={previewUrl}
+        onEnded={handleEnded}
+      />
     </div>
   );
 }
