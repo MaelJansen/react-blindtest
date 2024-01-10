@@ -53,7 +53,7 @@ function TrackPlayer({ trackId, token, onEnded, setPercentage }) {
   };
 
   return (
-    <div>
+    <div hidden>
       <audio
         id="audioElement"
         autoPlay
