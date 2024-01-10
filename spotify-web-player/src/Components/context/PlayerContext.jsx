@@ -84,6 +84,12 @@ const PlayerProvider = ({ children }) => {
       socket.on("room_code", (data) => {
         console.log(`room_joined ${data}`);
         setRoom(data);
+        return true;
+      });
+      socket.on("room_not_found", (data) => {
+        console.log(`room_not_found ${data}`);
+        setRoom(null);
+        return false;
       });
     }
   };
