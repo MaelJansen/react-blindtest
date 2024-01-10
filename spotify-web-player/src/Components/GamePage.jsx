@@ -107,6 +107,28 @@ export default function GamePage() {
                     Retour à l'accueil
                   </Button>
                 </Segment.Group>
+                <Segment.Group horizontal>
+                  <Button
+                    color="green"
+                    fluid
+                    size="massive"
+                    onClick={() => (
+                      setSelect(false),
+                      setSelectedPlaylistId(null),
+                      updateScore(0)
+                    )}
+                  >
+                    Rejouer
+                  </Button>
+                  <Button
+                    color="red"
+                    fluid
+                    size="massive"
+                    onClick={() => (window.location.href = "/")}
+                  >
+                    Retour à l'accueil
+                  </Button>
+                </Segment.Group>
               </Segment>
             </Grid.Column>
             <Grid.Column width={5} style={{ paddingRight: "2em" }}>
