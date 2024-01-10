@@ -125,11 +125,10 @@ export default function ResponseEntry(props) {
   return (
     <Segment
       textAlign="center"
-      attached="bottom"
+      attached="top"
       style={{ margin: "2em", width: "auto" }}
       verticalAlign="bottom"
     >
-      <Progress percent={answerPercentage} indicating attached="top" />
       {console.log("title :", titles)}
       {console.log("current track : ", currentTrack)}
       {!response ? (
@@ -169,6 +168,7 @@ export default function ResponseEntry(props) {
       ) : (
         <h1>🤔</h1>
       )}
+      <Progress percent={answerPercentage} indicating attached="bottom" />
     </Segment>
   );
 }
