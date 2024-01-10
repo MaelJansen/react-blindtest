@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { useEffect } from "react";
 import Player from "./Player";
 import "semantic-ui-css/semantic.min.css";
-import { Grid, Segment, Button } from "semantic-ui-react";
+import { Grid, Segment, Button, Placeholder } from "semantic-ui-react";
 import NavBar from "./NavBar";
 import Tchat from "./Tchat";
 import Quizz from "./Quizz";
@@ -12,6 +12,7 @@ import MyPlaylists from "./MyPlaylists";
 import { TrackProvider } from "./SpotifyContext";
 import { PlayerContext } from "./context/PlayerContext";
 import Result from "./Result";
+import FlipMove from "react-flip-move";
 
 export default function GamePage() {
   const { room, playerList, updatePlayerList } =
@@ -22,6 +23,7 @@ export default function GamePage() {
   const navigate = useNavigate();
   const [select, setSelect] = useState(false);
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
+  const [sortedPlayerList, setSortedPlayerList] = useState([]);
 
   useEffect(() => {
     socket.on("chatroom_users", (data) => {
@@ -50,13 +52,22 @@ export default function GamePage() {
     }
   };
 
-  const listPlayerslocal = playerList.map((player, index) => (
-    <Player
-      key={index}
-      name={player.username}
-      profile_picture={player.profile_picture}
-      score={player.score}
-    />
+  useEffect(() => {
+    const newSortedPlayerList = playerList
+      .slice()
+      .sort((a, b) => b.score - a.score);
+    setSortedPlayerList(newSortedPlayerList);
+  }, [playerList]);
+
+  var listPlayerslocal = sortedPlayerList.map((player, index) => (
+    <tr>
+      <Player
+        key={index}
+        name={player.username}
+        profile_picture={player.profile_picture}
+        score={player.score}
+      />
+    </tr>
   ));
 
   const winner = playerList.find((player) => player.score >= 30);
@@ -96,7 +107,7 @@ export default function GamePage() {
                   height: "40vh",
                 }}
               >
-                {listPlayerslocal}
+                <FlipMove>{listPlayerslocal}</FlipMove>
               </Segment>
               <Segment>
                 <Tchat></Tchat>
