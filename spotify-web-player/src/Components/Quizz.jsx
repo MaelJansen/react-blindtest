@@ -51,7 +51,7 @@ function Quizz(props) {
   const { currentTrack, updateCurrentTrack } = useContext(TrackContext);
   const { playlistCrafted } = useContext(PlayerContext);
   const { room } = useContext(PlayerContext);
-  const [percent, setPercentage] = useState(1);
+  const [percentage, setPercentage] = useState(1);
   const [foundTitle, setFoundTitle] = useState(false);
   const [foundArtist, setFoundArtist] = useState(false);
 
@@ -132,19 +132,8 @@ function Quizz(props) {
                   <Segment inverted size="big"></Segment>
                 </h1>
               )}
-              <Progress
-                percent={percent}
-                size="small"
-                indicating
-                attached="top"
-              />
+
               <Divider style={{ margin: 0, borderBottom: 0 }} />
-              <Progress
-                percent={percent}
-                size="small"
-                indicating
-                attached="bottom"
-              />
 
               {foundArtist ? (
                 <h2>{currentTrack.track.artists[0].name}</h2>
@@ -158,6 +147,7 @@ function Quizz(props) {
                 trackId={currentTrack.track.id}
                 token={token}
                 onEnded={handleNextTrack}
+                setPercentage={setPercentage}
               />
               <Button icon="forward" onClick={handleNextTrack}></Button>
             </GridColumn>
@@ -174,6 +164,34 @@ function Quizz(props) {
               )}
             </GridColumn>
           </Grid>
+          {percentage < 1 ? (
+            <Progress
+              style={{ margin: "2em", width: "auto" }}
+              percent={percentage}
+              size="small"
+            />
+          ) : percentage < 50 ? (
+            <Progress
+              style={{ margin: "2em", width: "auto" }}
+              percent={percentage}
+              size="small"
+              success
+            />
+          ) : percentage < 80 ? (
+            <Progress
+              style={{ margin: "2em", width: "auto" }}
+              percent={percentage}
+              size="small"
+              warning
+            />
+          ) : (
+            <Progress
+              style={{ margin: "2em", width: "auto" }}
+              percent={percentage}
+              size="small"
+              error
+            />
+          )}
 
           <ResponseEntry
             playlistId={props.selectedPlaylistId}

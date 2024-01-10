@@ -117,21 +117,21 @@ io.on('connection', (socket) => {
     
   });
 
-  socket.on('leave_room', (data) => {
-    const { username, room} = data;
-    socket.emit('room_code', null);
-    socket.leave(room);
-    const __createdtime__ = Date.now();
-    // Remove user from memory
-    allUsers = leaveRoom(socket.id, allUsers);
-    socket.to(room).emit('chatroom_users', allUsers);
-    socket.to(room).emit('receive_message', {
-      username: CHAT_BOT,
-      message: `${username} a quitté la partie`,
-      __createdtime__,
-    });
-    console.log(`${username} left room ${room}`);
+socket.on('leave_room', (data) => {
+  const { username, room } = data;
+  socket.emit('room_code', null);
+  socket.leave(room);
+  const __createdtime__ = Date.now();
+  // Remove user from memory
+  allUsers = leaveRoom(socket.id, allUsers);
+  socket.to(room).emit('chatroom_users', allUsers); // Notify other clients in the room about the updated player list
+  socket.to(room).emit('receive_message', {
+    username: CHAT_BOT,
+    message: `${username} a quitté la partie`,
+    __createdtime__,
   });
+  console.log(`${username} left room ${room}`);
+});
 
   // Listen for 'start_game' event
   socket.on('loads_game', (data) => {
