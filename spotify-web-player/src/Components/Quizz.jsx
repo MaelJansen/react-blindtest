@@ -109,7 +109,11 @@ function Quizz(props) {
   }, [socket]);
 
   const handleNextTrack = () => {
-    socket.emit("next_track", { room: room });
+    setFoundArtist(true);
+    setFoundTitle(true);
+    const timeout = setTimeout(() => {
+      socket.emit("next_track", { room: room });
+    }, 3000);
   };
 
   return (
