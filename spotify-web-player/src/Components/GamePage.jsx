@@ -1,5 +1,4 @@
-import React, { useState, useContext } from "react";
-import { useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Player from "./Player";
 import "semantic-ui-css/semantic.min.css";
 import { Grid, Segment, Button } from "semantic-ui-react";
@@ -18,11 +17,10 @@ export default function GamePage() {
   const { room, playerList, updatePlayerList, updateScore } =
     React.useContext(PlayerContext);
 
-  const playlistId = useParams();
   const socket = useContext(SocketContext);
   const navigate = useNavigate();
   const [select, setSelect] = useState(false);
-  const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState("");
 
   useEffect(() => {
     socket.on("chatroom_users", (data) => {

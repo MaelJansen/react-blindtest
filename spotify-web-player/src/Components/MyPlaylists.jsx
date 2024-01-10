@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios, { all } from "axios";
-import Quizz from "./Quizz";
-import { Link } from "react-router-dom";
 import { Button, Image, Grid, Segment, Container } from "semantic-ui-react";
 
 function MyPlaylists({ onSelectPlaylist }) {
