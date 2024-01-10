@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import TrackPlayer from "./TrackPlayer";
 import { TrackContext } from "./SpotifyContext";
 import { PlayerContext } from "./context/PlayerContext";
@@ -44,6 +45,7 @@ function Quizz(props) {
   const socket = React.useContext(SocketContext);
 
   const [tracks, setTracks] = useState([]);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const token = localStorage.getItem("token");
   const { allTracks, updateAllTracks } = useContext(TrackContext);
   const { currentTrack, updateCurrentTrack } = useContext(TrackContext);
