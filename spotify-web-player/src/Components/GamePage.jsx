@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { useEffect } from "react";
 import Player from "./Player";
 import "semantic-ui-css/semantic.min.css";
-import { Grid, Segment, Button } from "semantic-ui-react";
+import { Grid, Segment, Button, Placeholder } from "semantic-ui-react";
 import NavBar from "./NavBar";
 import Tchat from "./Tchat";
 import Quizz from "./Quizz";
@@ -50,14 +50,30 @@ export default function GamePage() {
     }
   };
 
-  const listPlayerslocal = playerList.map((player, index) => (
-    <Player
-      key={index}
-      name={player.username}
-      profile_picture={player.profile_picture}
-      score={player.score}
-    />
+  var listPlayerslocal = playerList.map((player, index) => (
+    <tr>
+      <Player
+        key={index}
+        name={player.username}
+        profile_picture={player.profile_picture}
+        score={player.score}
+      />
+    </tr>
   ));
+
+  useEffect(() => {
+    playerList.sort((a, b) => b.score - a.score);
+    listPlayerslocal = playerList.map((player, index) => (
+      <tr>
+        <Player
+          key={index}
+          name={player.username}
+          profile_picture={player.profile_picture}
+          score={player.score}
+        />
+      </tr>
+    ));
+  }, [playerList.map((player) => player.score)]);
 
   const winner = playerList.find((player) => player.score >= 30);
 
