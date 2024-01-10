@@ -13,7 +13,7 @@ import { PlayerContext } from "./context/PlayerContext";
 import Result from "./Result";
 
 export default function GamePage() {
-  const { room, playerList, updatePlayerList, updateScore } =
+  const { room, playerList, updatePlayerList } =
     React.useContext(PlayerContext);
 
   const socket = useContext(SocketContext);
@@ -78,58 +78,44 @@ export default function GamePage() {
                     <MyPlaylists
                       onSelectPlaylist={(id) => setSelectedPlaylistId(id)}
                     />
-                    <Button onClick={loadsGame}>Valider</Button>
-                  </div>
-                ) : !winner ? (
-                  <Quizz playlistId={selectedPlaylistId}></Quizz>
-                ) : (
-                  <Result></Result>
-                )}
-                <Segment.Group horizontal>
-                  <Button
-                    color="green"
-                    fluid
-                    size="massive"
-                    onClick={() => (
-                      setSelect(false),
-                      setSelectedPlaylistId(null),
-                      updateScore(0)
-                    )}
-                  >
-                    Rejouer
-                  </Button>
-                  <Button
-                    color="red"
-                    fluid
-                    size="massive"
-                    onClick={() => (window.location.href = "/")}
-                  >
-                    Retour à l'accueil
-                  </Button>
-                </Segment.Group>
-                <Segment.Group horizontal>
-                  <Button
-                    color="green"
-                    fluid
-                    size="massive"
-                    onClick={() => (
-                      setSelect(false),
-                      setSelectedPlaylistId(null),
-                      updateScore(0)
-                    )}
-                  >
-                    Rejouer
-                  </Button>
-                  <Button
-                    color="red"
-                    fluid
-                    size="massive"
-                    onClick={() => (window.location.href = "/")}
-                  >
-                    Retour à l'accueil
-                  </Button>
-                </Segment.Group>
-              </Segment>
+                  <Button onClick={loadsGame}>Valider</Button>
+                </div>
+              ) : !winner ? (
+                <div>
+                  <Segment>
+                    <Quizz playlistId={selectedPlaylistId}></Quizz>
+                  </Segment>
+                  <Segment>
+                    <ResponseEntry
+                      playlistId={selectedPlaylistId}
+                    ></ResponseEntry>
+                  </Segment>
+                </div>
+              ) : (
+                <div>
+                  <Segment>
+                    <Result></Result>
+                    <Segment.Group horizontal>
+                      <Button
+                        color="green"
+                        fluid
+                        size="massive"
+                        onClick={() => setSelect(false) && (winner = false)}
+                      >
+                        Rejouer
+                      </Button>
+                      <Button
+                        color="red"
+                        fluid
+                        size="massive"
+                        onClick={() => (window.location.href = "/")}
+                      >
+                        Retour à l'accueil
+                      </Button>
+                    </Segment.Group>
+                  </Segment>
+                </div>
+              )}
             </Grid.Column>
             <Grid.Column width={5} style={{ paddingRight: "2em" }}>
               <Segment
