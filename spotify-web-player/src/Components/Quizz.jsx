@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import TrackPlayer from "./TrackPlayer";
 import { TrackContext } from "./SpotifyContext";
 import { PlayerContext } from "./context/PlayerContext";
@@ -31,7 +30,6 @@ function Quizz(props) {
   const socket = React.useContext(SocketContext);
 
   const [tracks, setTracks] = useState([]);
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const token = localStorage.getItem("token");
   const { allTracks, updateAllTracks } = useContext(TrackContext);
   const { currentTrack, updateCurrentTrack } = useContext(TrackContext);
@@ -78,7 +76,6 @@ function Quizz(props) {
         const first20Tracks = tracksData.slice(0, 20);
         setTracks(tracksData);
         playlistCrafted(first20Tracks);
-
       } catch (error) {
         console.error("Error retrieving playlist tracks:", error);
       }
@@ -91,7 +88,6 @@ function Quizz(props) {
     socket.on("playlist_loaded", (data) => {
       console.log("playlist_loaded", data.playlist);
       updateAllTracks(data.playlist);
-      
     });
 
     socket.on("play_track", (data) => {
@@ -105,11 +101,10 @@ function Quizz(props) {
     socket.emit("next_track", { room: room });
   };
 
-
   return (
     <div>
       <h1>Quizz</h1>
-      { currentTrack && (
+      {currentTrack && (
         <div key={currentTrack.track.id}>
           <h3>{currentTrack.track.name}</h3>
           <img
@@ -123,8 +118,8 @@ function Quizz(props) {
             onEnded={handleNextTrack}
           />
           <button onClick={handleNextTrack}>Next Track</button>
-          
-        <Progress percent={percent} size="small" indicating />
+
+          <Progress percent={percent} size="small" indicating />
         </div>
       )}
     </div>
