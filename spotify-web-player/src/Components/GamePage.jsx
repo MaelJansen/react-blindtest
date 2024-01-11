@@ -15,10 +15,9 @@ import Result from "./Result";
 import FlipMove from "react-flip-move";
 
 export default function GamePage() {
-  const { room, playerList, updatePlayerList } =
+  const { room, playerList, updatePlayerList, updateScore } =
     React.useContext(PlayerContext);
 
-  const playlistId = useParams();
   const socket = useContext(SocketContext);
   const navigate = useNavigate();
   const [select, setSelect] = useState(false);
@@ -96,7 +95,31 @@ export default function GamePage() {
                 ) : !winner ? (
                   <Quizz playlistId={selectedPlaylistId}></Quizz>
                 ) : (
-                  <Result></Result>
+                  <div>
+                    <Result></Result>
+                    <Segment.Group horizontal>
+                      <Button
+                        color="green"
+                        fluid
+                        size="massive"
+                        onClick={() => (
+                          setSelect(false),
+                          setSelectedPlaylistId(null),
+                          updateScore(0)
+                        )}
+                      >
+                        Rejouer
+                      </Button>
+                      <Button
+                        color="red"
+                        fluid
+                        size="massive"
+                        onClick={() => (window.location.href = "/")}
+                      >
+                        Retour à l'accueil
+                      </Button>
+                    </Segment.Group>
+                  </div>
                 )}
               </Segment>
             </Grid.Column>
