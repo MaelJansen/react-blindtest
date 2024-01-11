@@ -18,6 +18,7 @@ import {
   PlaceholderImage,
   PlaceholderHeader,
   Placeholder,
+  Transition,
 } from "semantic-ui-react";
 import { SocketContext } from "./context/SocketContext";
 
@@ -111,6 +112,9 @@ function Quizz(props) {
   const handleNextTrack = () => {
     setFoundArtist(true);
     setFoundTitle(true);
+    const timeout = setTimeout(() => {
+      demo();
+    }, 3000);
     /*const timeout = setTimeout(() => {
       socket.emit("next_track", { room: room });
     }, 3000);*/
@@ -137,61 +141,13 @@ function Quizz(props) {
     <div>
       {currentTrack && (
         <div>
-          <Grid
-            key={currentTrack.track.id}
-            columns={2}
-            stackable
-            centered
-            verticalAlign="middle"
-          >
-            <GridColumn width={6}>
-              {foundTitle ? (
-                <h1>{currentTrack.track.name}</h1>
-              ) : (
-                <h1>
-                  <Icon name="music" />
-                  <Segment inverted size="big"></Segment>
-                </h1>
-              )}
+          <ResponseEntry
+            playlistId={props.selectedPlaylistId}
+            setFoundTitle={setFoundTitle}
+            setFoundArtist={setFoundArtist}
+          ></ResponseEntry>
 
-              <Divider style={{ margin: 0, borderBottom: 0 }} />
-
-              {foundArtist ? (
-                <h2>{currentTrack.track.artists[0].name}</h2>
-              ) : (
-                <h2>
-                  <Icon name="user outline" />
-                  <Segment inverted size="small"></Segment>
-                </h2>
-              )}
-               <h5>
-              Morceau {currentTrackIndex} sur {allTracks.length}
-              </h5>
-              <TrackPlayer
-                trackId={currentTrack.track.id}
-                token={token}
-                onEnded={handleNextTrack}
-                setPercentage={setPercentage}
-              />
-              <Button
-                icon="forward"
-                onClick={/*handleNextTrack*/ demo}
-              ></Button>
-            </GridColumn>
-            <GridColumn width={8}>
-              {foundArtist && foundTitle ? (
-                <Image
-                  src={currentTrack.track.album.images[0].url}
-                  size="large"
-                />
-              ) : (
-                <Placeholder inverted>
-                  <PlaceholderImage square />
-                </Placeholder>
-              )}
-            </GridColumn>
-          </Grid>
-          {percentage < 1 ? (
+          {percentage <= 1 || percentage == 100 ? (
             <Progress
               style={{ margin: "2em", width: "auto" }}
               percent={percentage}
@@ -220,11 +176,76 @@ function Quizz(props) {
             />
           )}
 
-          <ResponseEntry
-            playlistId={props.selectedPlaylistId}
-            setFoundTitle={setFoundTitle}
-            setFoundArtist={setFoundArtist}
-          ></ResponseEntry>
+          <Grid
+            inverted
+            key={currentTrack.track.id}
+            columns={2}
+            stackable
+            centered
+            verticalAlign="middle"
+          >
+            <GridColumn width={6}>
+              <Transition
+                visible={foundTitle}
+                animation="fade up"
+                duration={{ hide: 0, show: 500 }}
+              >
+                <h1>{currentTrack.track.name}</h1>
+              </Transition>
+              {!foundTitle && (
+                <h1>
+                  <Segment inverted size="big">
+                    <Icon name="music" size="large" />
+                  </Segment>
+                </h1>
+              )}
+
+              <Divider style={{ margin: 0, borderBottom: 0 }} />
+
+              {/* Semantic UI Transition for Artist */}
+              <Transition
+                visible={foundArtist}
+                animation="fade down"
+                duration={{ hide: 0, show: 1000 }}
+              >
+                <h2>{currentTrack.track.artists[0].name}</h2>
+              </Transition>
+              {/* Placeholder if artist not found */}
+              {!foundArtist && (
+                <h2>
+                  <Segment inverted size="small">
+                    <Icon
+                      style={{ marginLeft: "0.20em" }}
+                      name="user"
+                      size="big"
+                    />
+                  </Segment>
+                </h2>
+              )}
+               <h5>
+              Morceau {currentTrackIndex} sur {allTracks.length}
+              </h5>
+              <TrackPlayer
+                trackId={currentTrack.track.id}
+                token={token}
+                onEnded={handleNextTrack}
+                setPercentage={setPercentage}
+              />
+              <Button icon="forward" onClick={handleNextTrack}></Button>
+            </GridColumn>
+            <GridColumn width={6}>
+              {foundArtist && foundTitle ? (
+                <Image
+                  src={currentTrack.track.album.images[0].url}
+                  size="large"
+                />
+              ) : (
+                <Placeholder inverted>
+                  <PlaceholderImage square size="large" />
+                </Placeholder>
+              )}
+            </GridColumn>
+          </Grid>
         </div>
       )}
     </div>

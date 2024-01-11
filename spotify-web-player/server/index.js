@@ -30,7 +30,7 @@ var spotify_redirect_uri = 'http://192.168.138.93:3000/auth/callback';
 
 var generateRandomString = function (length) {
   var text = '';
-  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var possible = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789';
 
   for (var i = 0; i < length; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -67,17 +67,30 @@ io.on('connection', (socket) => {
   });
 
   socket.on('update_score', (data) => {
-    console.log("test de update score")
     const {username, room, spotify_user_id, newScore} = data;
     const existingUser = allUsers.find(user => user.spotify_user_id === spotify_user_id && user.room === room);
 
     if (existingUser) {
+      const scoreDiff = newScore - existingUser.score;
+      const __createdtime__ = Date.now();
       existingUser.score = newScore;
       console.log("updateScore");
       
       chatRoomUsers = allUsers.filter((user) => user.room === room);
       socket.to(room).emit('chatroom_users', chatRoomUsers);
+      socket.to(room).emit('receive_message', {
+        username: CHAT_BOT,
+        broadcast: true,
+        message: `${username} a gagné ${scoreDiff} points !`,
+        __createdtime__,
+      });
       socket.emit('chatroom_users', chatRoomUsers);
+      socket.emit('receive_message', {
+        username: CHAT_BOT,
+        broadcast: true,
+        message: `Vous avez gagné ${scoreDiff} points !`,
+        __createdtime__,
+      });
       return;
     }
   });
@@ -153,9 +166,15 @@ socket.on('leave_room', (data) => {
   });
 
   socket.on('next_track', (data) => {
-    const { room, __createdtime__ } = data;
+    const { room } = data;
     // removes first element and plays the new first
     playlist.shift();
+    const __createdtime__ = Date.now();
+    io.to(room).emit('receive_message', {
+      username: CHAT_BOT,
+      message: `Musique suivante, accrochez-vous !`,
+      __createdtime__,
+    });
     io.to(room).emit('play_track', { track: playlist[0], __createdtime__ });
   }
   );
