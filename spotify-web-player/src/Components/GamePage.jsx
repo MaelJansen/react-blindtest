@@ -13,6 +13,7 @@ import { TrackProvider } from "./SpotifyContext";
 import { PlayerContext } from "./context/PlayerContext";
 import Result from "./Result";
 import FlipMove from "react-flip-move";
+import Garland from "./Garland";
 
 export default function GamePage() {
   const { room, playerList, updatePlayerList, updateScore } =
@@ -24,7 +25,6 @@ export default function GamePage() {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
   const [sortedPlayerList, setSortedPlayerList] = useState([]);
   const [winnerPlayer, setWinnerPlayer] = useState(null);
-
 
   useEffect(() => {
     socket.on("chatroom_users", (data) => {
@@ -66,14 +66,14 @@ export default function GamePage() {
     setSortedPlayerList(newSortedPlayerList);
 
     // Check if a player has reached 30 points
-    const playerWith30Points = newSortedPlayerList.find(player => player.score >= 30);
+    const playerWith30Points = newSortedPlayerList.find(
+      (player) => player.score >= 30
+    );
     if (playerWith30Points) {
       // Do something when a player reaches 30 points
       console.log(`${playerWith30Points.name} has reached 30 points!`);
       setWinnerPlayer(playerWith30Points);
     }
-
-    
   }, [playerList]);
 
   var listPlayerslocal = sortedPlayerList.map((player, index) => (
@@ -87,12 +87,10 @@ export default function GamePage() {
     </tr>
   ));
 
-  
-
   return (
-    <div>
+    <div style={{ backgroundColor: "#181818" }}>
       <NavBar></NavBar>
-
+      <Garland></Garland>
       <TrackProvider>
         <Grid columns={2}>
           <Grid.Row divided>
@@ -101,6 +99,7 @@ export default function GamePage() {
                 style={{
                   overflowY: "scroll",
                   height: "90vh",
+                  backgroundColor: "rgba(0, 234, 98, 0.2)",
                 }}
               >
                 {!select ? (
@@ -108,7 +107,13 @@ export default function GamePage() {
                     <MyPlaylists
                       onSelectPlaylist={(id) => setSelectedPlaylistId(id)}
                     />
-                    <Button onClick={loadsGame}>Valider</Button>
+                    <Button
+                      onClick={loadsGame}
+                      size="large"
+                      style={{ backgroundColor: "rgb(0, 234, 98)" }}
+                    >
+                      Valider
+                    </Button>
                   </div>
                 ) : !winnerPlayer ? (
                   <Quizz playlistId={selectedPlaylistId}></Quizz>
@@ -146,11 +151,12 @@ export default function GamePage() {
                 style={{
                   overflowY: "scroll",
                   height: "40vh",
+                  backgroundColor: "rgba(0, 234, 98, 0.2)",
                 }}
               >
                 <FlipMove>{listPlayerslocal}</FlipMove>
               </Segment>
-              <Segment>
+              <Segment style={{ backgroundColor: "rgba(221, 221, 221, 0.75)" }}>
                 <Tchat></Tchat>
               </Segment>
             </Grid.Column>

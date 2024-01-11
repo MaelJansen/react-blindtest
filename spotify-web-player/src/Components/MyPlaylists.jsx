@@ -2,22 +2,32 @@ import React, { useEffect, useState } from "react";
 import axios, { all } from "axios";
 import Quizz from "./Quizz";
 import { Link } from "react-router-dom";
-import { Button, Image, Grid, Segment, Container } from "semantic-ui-react";
+import {
+  Button,
+  Image,
+  Grid,
+  Segment,
+  Container,
+  Icon,
+} from "semantic-ui-react";
+import Garland from "./Garland";
 
 function MyPlaylists({ onSelectPlaylist }) {
   const [playlists, setPlaylists] = useState([]);
-  
+
   const changeColor = (playlistId) => {
     // Call the onSelectPlaylist callback with the playlist ID
     onSelectPlaylist(playlistId);
 
     const playlist = document.getElementById(playlistId);
-    playlist.className = "ui button green fluid";
+    playlist.className = "ui button inverted fluid";
 
-    const playlists = document.getElementsByClassName("ui button green fluid");
+    const playlists = document.getElementsByClassName(
+      "ui button inverted fluid"
+    );
     for (let i = 0; i < playlists.length; i++) {
       if (playlists[i].id !== playlistId) {
-        playlists[i].className = "ui grey fluid button";
+        playlists[i].className = "ui basic inverted button fluid";
       }
     }
   };
@@ -34,7 +44,10 @@ function MyPlaylists({ onSelectPlaylist }) {
           }
         );
         const playlistsData = response.data.items;
-        console.log('localStorage.getItem("token")', localStorage.getItem("token"));
+        console.log(
+          'localStorage.getItem("token")',
+          localStorage.getItem("token")
+        );
         setPlaylists(playlistsData);
         console.log("My playlists :", playlistsData);
       } catch (error) {
@@ -46,16 +59,21 @@ function MyPlaylists({ onSelectPlaylist }) {
 
   return (
     <div>
-      <h1>My Playlists</h1>
+      <h1 style={{ color: "white" }}>
+        Mes Playlists <Icon name="spotify"></Icon>
+      </h1>
+
       <Grid columns={4}>
         <Grid.Row>
           {playlists.map((playlist) =>
             playlist.key % 2 ? (
               <Grid.Column>
-                <Segment>
+                <div style={{ paddingBottom: "2em" }}>
                   <Button
                     fluid
-                    color="grey"
+                    basic
+                    inverted
+                    style={{ backgroundColor: "rgba(221, 221, 221, 0.75)" }}
                     onClick={() => changeColor(playlist.id)}
                     id={playlist.id}
                   >
@@ -73,7 +91,7 @@ function MyPlaylists({ onSelectPlaylist }) {
                     <p>{playlist.tracks.total} tracks</p>
                     <p>{playlist.description}</p>
                   </Button>
-                </Segment>
+                </div>
               </Grid.Column>
             ) : null
           )}
@@ -82,10 +100,12 @@ function MyPlaylists({ onSelectPlaylist }) {
           {playlists.map((playlist) =>
             !playlist.key % 2 ? (
               <Grid.Column>
-                <Segment>
+                <div style={{ paddingBottom: "2em" }}>
                   <Button
                     fluid
-                    color="grey"
+                    basic
+                    inverted
+                    style={{ backgroundColor: "rgba(221, 221, 221, 0.75)" }}
                     onClick={() => changeColor(playlist.id)}
                     id={playlist.id}
                   >
@@ -103,7 +123,7 @@ function MyPlaylists({ onSelectPlaylist }) {
                     <p>{playlist.tracks.total} tracks</p>
                     <p>{playlist.description}</p>
                   </Button>
-                </Segment>
+                </div>
               </Grid.Column>
             ) : null
           )}

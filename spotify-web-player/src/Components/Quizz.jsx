@@ -113,8 +113,8 @@ function Quizz(props) {
     setFoundArtist(true);
     setFoundTitle(true);
     const timeout = setTimeout(() => {
-      console.log("allTracks.length",allTracks.length);
-      console.log("currentTrackIndex+1",currentTrackIndex+1);
+      console.log("allTracks.length", allTracks.length);
+      console.log("currentTrackIndex+1", currentTrackIndex + 1);
       if (currentTrackIndex + 1 > tracks.length) {
         // All tracks have been played
         console.log("All tracks have been played");
@@ -186,17 +186,20 @@ function Quizz(props) {
                 animation="fade up"
                 duration={{ hide: 0, show: 500 }}
               >
-                <h1>{currentTrack.track.name}</h1>
+                <h1 style={{ color: "white" }}>{currentTrack.track.name}</h1>
               </Transition>
               {!foundTitle && (
                 <h1>
-                  <Segment inverted size="big">
+                  <Segment
+                    style={{ backgroundColor: "rgba(221, 221, 221, 0.75)" }}
+                    size="big"
+                  >
                     <Icon name="music" size="large" />
                   </Segment>
                 </h1>
               )}
 
-              <Divider style={{ margin: 0, borderBottom: 0 }} />
+              <Divider inverted />
 
               {/* Semantic UI Transition for Artist */}
               <Transition
@@ -204,12 +207,17 @@ function Quizz(props) {
                 animation="fade down"
                 duration={{ hide: 0, show: 1000 }}
               >
-                <h2>{currentTrack.track.artists[0].name}</h2>
+                <h2 style={{ color: "white" }}>
+                  {currentTrack.track.artists[0].name}
+                </h2>
               </Transition>
               {/* Placeholder if artist not found */}
               {!foundArtist && (
                 <h2>
-                  <Segment inverted size="small">
+                  <Segment
+                    style={{ backgroundColor: "rgba(221, 221, 221, 0.75)" }}
+                    size="small"
+                  >
                     <Icon
                       style={{ marginLeft: "0.20em" }}
                       name="user"
@@ -218,8 +226,8 @@ function Quizz(props) {
                   </Segment>
                 </h2>
               )}
-               <h5>
-              Morceau {currentTrackIndex} sur {allTracks.length}
+              <h5 style={{ color: "white" }}>
+                Morceau {currentTrackIndex} sur {allTracks.length}
               </h5>
               <TrackPlayer
                 trackId={currentTrack.track.id}
@@ -227,7 +235,11 @@ function Quizz(props) {
                 onEnded={handleNextTrack}
                 setPercentage={setPercentage}
               />
-              <Button icon="forward" onClick={handleNextTrack}></Button>
+              <Button
+                icon="forward"
+                style={{ backgroundColor: "rgba(221, 221, 221, 0.75)" }}
+                onClick={handleNextTrack}
+              ></Button>
             </GridColumn>
             <GridColumn width={6}>
               {foundArtist && foundTitle ? (
