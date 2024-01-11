@@ -23,6 +23,8 @@ export default function GamePage() {
   const [select, setSelect] = useState(false);
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
   const [sortedPlayerList, setSortedPlayerList] = useState([]);
+  const [winnerPlayer, setWinnerPlayer] = useState(null);
+
 
   useEffect(() => {
     socket.on("chatroom_users", (data) => {
@@ -34,9 +36,15 @@ export default function GamePage() {
       setSelect(true);
     });
 
+    socket.on("winner_selected", ({ winner }) => {
+      console.log("Winner Selected:", winner);
+      setWinnerPlayer(winner);
+    });
+
     return () => {
       socket.off("chatroom_users");
       socket.off("game_loaded");
+      socket.off("winner_selected");
     };
   }, [socket, navigate, room]);
 
@@ -56,6 +64,16 @@ export default function GamePage() {
       .slice()
       .sort((a, b) => b.score - a.score);
     setSortedPlayerList(newSortedPlayerList);
+
+    // Check if a player has reached 30 points
+    const playerWith30Points = newSortedPlayerList.find(player => player.score >= 30);
+    if (playerWith30Points) {
+      // Do something when a player reaches 30 points
+      console.log(`${playerWith30Points.name} has reached 30 points!`);
+      setWinnerPlayer(playerWith30Points);
+    }
+
+    
   }, [playerList]);
 
   var listPlayerslocal = sortedPlayerList.map((player, index) => (
@@ -69,7 +87,7 @@ export default function GamePage() {
     </tr>
   ));
 
-  const winner = playerList.find((player) => player.score >= 30);
+  
 
   return (
     <div>
@@ -92,7 +110,7 @@ export default function GamePage() {
                     />
                     <Button onClick={loadsGame}>Valider</Button>
                   </div>
-                ) : !winner ? (
+                ) : !winnerPlayer ? (
                   <Quizz playlistId={selectedPlaylistId}></Quizz>
                 ) : (
                   <div>

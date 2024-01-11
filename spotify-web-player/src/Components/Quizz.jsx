@@ -112,9 +112,24 @@ function Quizz(props) {
     setFoundArtist(true);
     setFoundTitle(true);
     const timeout = setTimeout(() => {
-      socket.emit("next_track", { room: room });
-      setCurrentTrackIndex(currentTrackIndex+1);
-    }, 1000);
+      console.log("tracks.length",tracks.length);
+      console.log("currentTrackIndex+1",currentTrackIndex+1);
+      if (currentTrackIndex + 1 > tracks.length) {
+        // All tracks have been played
+        console.log("All tracks have been played");
+        selectWinner();
+      } else {
+        // Continue to the next track
+        socket.emit("next_track", { room: room });
+        console.log("Next track");
+        setCurrentTrackIndex(currentTrackIndex + 1);
+      }
+    }, 3000);
+  };
+
+  const selectWinner = () => {
+    // Emit an event to the server to handle winner selection
+    socket.emit("select_winner", { room });
   };
 
   return (
