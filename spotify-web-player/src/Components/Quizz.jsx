@@ -111,9 +111,13 @@ function Quizz(props) {
   const handleNextTrack = () => {
     setFoundArtist(true);
     setFoundTitle(true);
-    const timeout = setTimeout(() => {
+    /*const timeout = setTimeout(() => {
       socket.emit("next_track", { room: room });
-    }, 3000);
+    }, 3000);*/
+  };
+
+  const demo = () => {
+    socket.emit("next_track", { room: room });
   };
 
   return (
@@ -153,7 +157,10 @@ function Quizz(props) {
                 onEnded={handleNextTrack}
                 setPercentage={setPercentage}
               />
-              <Button icon="forward" onClick={handleNextTrack}></Button>
+              <Button
+                icon="forward"
+                onClick={/*handleNextTrack*/ demo}
+              ></Button>
             </GridColumn>
             <GridColumn width={8}>
               {foundArtist && foundTitle ? (
