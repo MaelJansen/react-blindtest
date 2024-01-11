@@ -15,15 +15,16 @@ import Result from "./Result";
 import FlipMove from "react-flip-move";
 
 export default function GamePage() {
-  const { room, playerList, updatePlayerList } =
+  const { room, playerList, updatePlayerList, updateScore } =
     React.useContext(PlayerContext);
 
-  const playlistId = useParams();
   const socket = useContext(SocketContext);
   const navigate = useNavigate();
   const [select, setSelect] = useState(false);
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
   const [sortedPlayerList, setSortedPlayerList] = useState([]);
+  const [winnerPlayer, setWinnerPlayer] = useState(null);
+
 
   useEffect(() => {
     socket.on("chatroom_users", (data) => {
@@ -33,11 +34,18 @@ export default function GamePage() {
     socket.on("game_loaded", () => {
       // Redirect to the game page when the game starts
       setSelect(true);
+      setWinnerPlayer(null);
+    });
+
+    socket.on("winner_selected", ({ winner }) => {
+      console.log("Winner Selected:", winner);
+      setWinnerPlayer(winner);
     });
 
     return () => {
       socket.off("chatroom_users");
       socket.off("game_loaded");
+      socket.off("winner_selected");
     };
   }, [socket, navigate, room]);
 
@@ -57,6 +65,16 @@ export default function GamePage() {
       .slice()
       .sort((a, b) => b.score - a.score);
     setSortedPlayerList(newSortedPlayerList);
+
+    // Check if a player has reached 30 points
+    const playerWith30Points = newSortedPlayerList.find(player => player.score >= 30);
+    if (playerWith30Points) {
+      // Do something when a player reaches 30 points
+      console.log(`${playerWith30Points.name} has reached 30 points!`);
+      setWinnerPlayer(playerWith30Points);
+    }
+
+    
   }, [playerList]);
 
   var listPlayerslocal = sortedPlayerList.map((player, index) => (
@@ -70,7 +88,7 @@ export default function GamePage() {
     </tr>
   ));
 
-  const winner = playerList.find((player) => player.score >= 20);
+  
 
   return (
     <div>
@@ -93,10 +111,34 @@ export default function GamePage() {
                     />
                     <Button onClick={loadsGame}>Valider</Button>
                   </div>
-                ) : !winner ? (
+                ) : !winnerPlayer ? (
                   <Quizz playlistId={selectedPlaylistId}></Quizz>
                 ) : (
-                  <Result></Result>
+                  <div>
+                    <Result></Result>
+                    <Segment.Group horizontal>
+                      <Button
+                        color="green"
+                        fluid
+                        size="massive"
+                        onClick={() => (
+                          setSelect(false),
+                          setSelectedPlaylistId(null),
+                          updateScore(0)
+                        )}
+                      >
+                        Rejouer
+                      </Button>
+                      <Button
+                        color="red"
+                        fluid
+                        size="massive"
+                        onClick={() => (window.location.href = "/")}
+                      >
+                        Retour à l'accueil
+                      </Button>
+                    </Segment.Group>
+                  </div>
                 )}
               </Segment>
             </Grid.Column>
