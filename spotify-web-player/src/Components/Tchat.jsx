@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import "semantic-ui-css/semantic.min.css";
 import { Form, Input, Feed } from "semantic-ui-react";
 import Message from "./Message";
+import MessageBroadcast from "./MessageBroadcast";
 import { SocketContext } from "./context/SocketContext";
 import { PlayerContext } from "./context/PlayerContext";
 
@@ -32,6 +33,7 @@ export default function Tchat() {
         ...state,
         {
           message: data.message,
+          broadcast: data.broadcast,
           username: data.username,
           __createdtime__: data.__createdtime__,
         },
@@ -45,14 +47,23 @@ export default function Tchat() {
   return (
     <div>
       <Feed id="chatContainer" style={{ overflowY: "scroll", height: "30vh" }}>
-        {messagesReceived.map((message, index) => (
-          <Message
-            key={index}
-            message={message.message}
-            username={message.username}
-            __createdtime__={message.__createdtime__}
-          />
-        ))}
+        {messagesReceived.map((message, index) =>
+          message.broadcast ? (
+            <MessageBroadcast
+              key={index}
+              message={message.message}
+              username={message.username}
+              __createdtime__={message.__createdtime__}
+            />
+          ) : (
+            <Message
+              key={index}
+              message={message.message}
+              username={message.username}
+              __createdtime__={message.__createdtime__}
+            />
+          )
+        )}
       </Feed>
       <Form.Field
         style={{ paddingTop: "1em" }}

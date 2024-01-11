@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import "semantic-ui-css/semantic.min.css";
-import { Dropdown, Feed, Progress, Segment } from "semantic-ui-react";
+import {
+  Dropdown,
+  Feed,
+  Progress,
+  Segment,
+  Transition,
+} from "semantic-ui-react";
 import axios, { all } from "axios";
 import { TrackContext } from "./SpotifyContext";
 import { SocketContext } from "./context/SocketContext";
@@ -100,24 +106,19 @@ export default function ResponseEntry(props) {
   }, [currentTrack]);
 
   function isResponse(value) {
-    var message = "a gagné 8 points";
     if (value === currentTrack.track.name) {
       setResponse(true);
       props.setFoundTitle(true);
-      submitMessage(message);
       setAnswerPercentage(answerPercentage + 50);
       updateScore(score + 8);
     }
   }
 
   function isResponseArtist(value) {
-    var message = "a gagné 2 points";
     if (value === currentTrack.track.artists[0].name) {
       setResponseArtist(true);
       props.setFoundArtist(true);
-      submitMessage(message);
       setAnswerPercentage(answerPercentage + 50);
-      console.log("bonne réponse");
       updateScore(score + 2);
     }
   }
@@ -125,7 +126,7 @@ export default function ResponseEntry(props) {
   return (
     <Segment
       textAlign="center"
-      attached="top"
+      attached="bottom"
       style={{ margin: "2em", width: "auto" }}
       verticalAlign="bottom"
     >
@@ -133,7 +134,9 @@ export default function ResponseEntry(props) {
       {console.log("current track : ", currentTrack)}
       {!response ? (
         <div>
+          <h3>Titre</h3>
           <Dropdown
+            inverted
             placeholder="Entrez le titre"
             fluid
             selection
@@ -148,6 +151,7 @@ export default function ResponseEntry(props) {
       ) : null}
       {!responseArtist ? (
         <div>
+          <h3>Artiste</h3>
           <Dropdown
             placeholder="Entrez l'artiste"
             fluid
@@ -168,7 +172,7 @@ export default function ResponseEntry(props) {
       ) : (
         <h1>🤔</h1>
       )}
-      <Progress percent={answerPercentage} indicating attached="bottom" />
+      <Progress inverted percent={answerPercentage} indicating attached="top" />
     </Segment>
   );
 }
