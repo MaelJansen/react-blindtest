@@ -126,7 +126,12 @@ export default function ResponseEntry(props) {
     <Segment
       textAlign="center"
       attached="top"
-      style={{ margin: "2em", width: "auto" }}
+      style={{
+        margin: "2em",
+        width: "auto",
+        backgroundColor: "rgba(221, 221, 221, 0.5)",
+        border: "0",
+      }}
       verticalAlign="bottom"
     >
       {console.log("title :", titles)}

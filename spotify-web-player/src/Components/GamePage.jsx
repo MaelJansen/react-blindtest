@@ -73,7 +73,7 @@ export default function GamePage() {
   const winner = playerList.find((player) => player.score >= 30);
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#181818" }}>
       <NavBar></NavBar>
 
       <TrackProvider>
@@ -84,6 +84,7 @@ export default function GamePage() {
                 style={{
                   overflowY: "scroll",
                   height: "90vh",
+                  backgroundColor: "rgba(0, 234, 98, 0.2)",
                 }}
               >
                 {!select ? (
@@ -91,7 +92,13 @@ export default function GamePage() {
                     <MyPlaylists
                       onSelectPlaylist={(id) => setSelectedPlaylistId(id)}
                     />
-                    <Button onClick={loadsGame}>Valider</Button>
+                    <Button
+                      onClick={loadsGame}
+                      size="large"
+                      style={{ backgroundColor: "rgb(0, 234, 98)" }}
+                    >
+                      Valider
+                    </Button>
                   </div>
                 ) : !winner ? (
                   <Quizz playlistId={selectedPlaylistId}></Quizz>
@@ -105,11 +112,12 @@ export default function GamePage() {
                 style={{
                   overflowY: "scroll",
                   height: "40vh",
+                  backgroundColor: "rgba(0, 234, 98, 0.2)",
                 }}
               >
                 <FlipMove>{listPlayerslocal}</FlipMove>
               </Segment>
-              <Segment>
+              <Segment style={{ backgroundColor: "rgba(221, 221, 221, 0.75)" }}>
                 <Tchat></Tchat>
               </Segment>
             </Grid.Column>
