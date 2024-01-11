@@ -112,7 +112,7 @@ function Quizz(props) {
     setFoundArtist(true);
     setFoundTitle(true);
     const timeout = setTimeout(() => {
-      console.log("tracks.length",tracks.length);
+      console.log("allTracks.length",allTracks.length);
       console.log("currentTrackIndex+1",currentTrackIndex+1);
       if (currentTrackIndex + 1 > tracks.length) {
         // All tracks have been played
@@ -164,7 +164,7 @@ function Quizz(props) {
                 </h2>
               )}
                <h5>
-              Morceau {currentTrackIndex} sur {tracks.length}
+              Morceau {currentTrackIndex} sur {allTracks.length}
               </h5>
               <TrackPlayer
                 trackId={currentTrack.track.id}
