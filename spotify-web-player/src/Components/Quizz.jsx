@@ -45,7 +45,7 @@ function Quizz(props) {
   const socket = React.useContext(SocketContext);
 
   const [tracks, setTracks] = useState([]);
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(1);
   const token = localStorage.getItem("token");
   const { allTracks, updateAllTracks } = useContext(TrackContext);
   const { currentTrack, updateCurrentTrack } = useContext(TrackContext);
@@ -86,7 +86,7 @@ function Quizz(props) {
 
         tracksData = shuffle(tracksData);
         const first20Tracks = tracksData.slice(0, 20);
-        setTracks(tracksData);
+        setTracks(first20Tracks);
         playlistCrafted(first20Tracks);
       } catch (error) {
         console.error("Error retrieving playlist tracks:", error);
@@ -112,8 +112,24 @@ function Quizz(props) {
     setFoundArtist(true);
     setFoundTitle(true);
     const timeout = setTimeout(() => {
-      socket.emit("next_track", { room: room });
+      console.log("tracks.length",tracks.length);
+      console.log("currentTrackIndex+1",currentTrackIndex+1);
+      if (currentTrackIndex + 1 > tracks.length) {
+        // All tracks have been played
+        console.log("All tracks have been played");
+        selectWinner();
+      } else {
+        // Continue to the next track
+        socket.emit("next_track", { room: room });
+        console.log("Next track");
+        setCurrentTrackIndex(currentTrackIndex + 1);
+      }
     }, 3000);
+  };
+
+  const selectWinner = () => {
+    // Emit an event to the server to handle winner selection
+    socket.emit("select_winner", { room });
   };
 
   return (
@@ -147,6 +163,9 @@ function Quizz(props) {
                   <Segment inverted size="small"></Segment>
                 </h2>
               )}
+               <h5>
+              Morceau {currentTrackIndex} sur {tracks.length}
+              </h5>
               <TrackPlayer
                 trackId={currentTrack.track.id}
                 token={token}

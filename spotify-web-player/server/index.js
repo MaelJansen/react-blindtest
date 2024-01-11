@@ -160,6 +160,26 @@ socket.on('leave_room', (data) => {
   }
   );
 
+   socket.on("select_winner", ({ room }) => {
+    const roomPlayers = allUsers.filter((user) => user.room === room);
+
+    // Find the player with the highest score
+    let winner = null;
+    let maxScore = -1;
+
+    roomPlayers.forEach((player) => {
+      if (player.score > maxScore) {
+        winner = player;
+        maxScore = player.score;
+      }
+    });
+
+    if (winner) {
+      // Emit an event to notify clients about the winner
+      io.to(room).emit("winner_selected", { winner });
+    }
+  });
+
   socket.on('send_message', (data) => {
     const { message, username, room, __createdtime__} = data;
     io.to(room).emit('receive_message', { message, username, __createdtime__ });
