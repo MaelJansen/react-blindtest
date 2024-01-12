@@ -67,7 +67,7 @@ export default function GamePage() {
     setSortedPlayerList(newSortedPlayerList);
 
     // Check if a player has reached 30 points
-    const playerWith30Points = newSortedPlayerList.find(player => player.score >= 30);
+    const playerWith30Points = newSortedPlayerList.find(player => player.score >= 20);
     if (playerWith30Points) {
       // Do something when a player reaches 30 points
       console.log(`${playerWith30Points.name} has reached 30 points!`);

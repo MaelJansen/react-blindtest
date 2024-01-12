@@ -109,9 +109,13 @@ function Quizz(props) {
     });
   }, [socket]);
 
-  const handleNextTrack = () => {
+  const revealAnswer = () => {
     setFoundArtist(true);
     setFoundTitle(true);
+  };
+
+  const handleNextTrack = () => {
+    revealAnswer();
     const timeout = setTimeout(() => {
       demo();
     }, 3000);
@@ -228,7 +232,7 @@ function Quizz(props) {
               <TrackPlayer
                 trackId={currentTrack.track.id}
                 token={token}
-                onEnded={handleNextTrack}
+                onEnded={revealAnswer}
                 setPercentage={setPercentage}
               />
               <Button icon="forward" onClick={handleNextTrack}></Button>
